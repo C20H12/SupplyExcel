@@ -1,0 +1,59 @@
+
+Sub Terminate()
+
+    Dim ws As Worksheet
+    Dim currentID As Variant
+    Dim menuSheet As Worksheet
+    Dim menuTable As ListObject
+    Dim idColumn As ListColumn
+    Dim deleteCell As Range
+    
+    ' Get reference to the current sheet
+    Set ws = ActiveSheet
+    
+    ' Get the currentID from cell G2
+    currentID = ws.Range("G2").Value
+    
+    ' Get reference to the "Menu" sheet
+    On Error Resume Next
+    Set menuSheet = ThisWorkbook.Sheets("Menu")
+    On Error GoTo 0
+    
+    If Not menuSheet Is Nothing Then
+        ' Get reference to the "MenuTable" as a ListObject (assumes it's a table)
+        On Error Resume Next
+        Set menuTable = menuSheet.ListObjects("MenuTable")
+        On Error GoTo 0
+        
+        If Not menuTable Is Nothing Then
+            ' Find the column in the table that matches the ID (assumes it's in column D)
+            On Error Resume Next
+            Set idColumn = menuTable.ListColumns("ID")
+            On Error GoTo 0
+            
+            If Not idColumn Is Nothing Then
+                ' Look for the currentID in the table's ID column
+                On Error Resume Next
+                Set deleteCell = idColumn.DataBodyRange.Find(What:=currentID, LookIn:=xlValues, LookAt:=xlWhole)
+                On Error GoTo 0
+                
+                If Not deleteCell Is Nothing Then
+                    ' Delete the entire row that contains the deleteCell
+                    deleteCell.EntireRow.Delete
+                Else
+                    MsgBox "ID not found in MenuTable."
+                End If
+            Else
+                MsgBox "Column 'ID' not found in MenuTable."
+            End If
+        Else
+            MsgBox "Table 'MenuTable' not found in 'Menu' sheet."
+        End If
+    Else
+        MsgBox "'Menu' sheet not found."
+    End If
+    
+    
+    ThisWorkbook.Sheets(Application.ActiveSheet.Name).Delete
+    
+End Sub
