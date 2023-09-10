@@ -1,5 +1,3 @@
-
-
 Private Sub NC_CancelButton_Click()
     Unload Me
 End Sub
