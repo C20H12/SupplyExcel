@@ -1,4 +1,5 @@
 Private Sub NC_CancelButton_Click()
+    ' closes the form
     Unload Me
 End Sub
 
