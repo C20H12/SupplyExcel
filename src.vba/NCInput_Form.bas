@@ -1,4 +1,17 @@
 
+Private Sub UserForm_Initialize()
+'
+' Initialize frm
+' (This runs everytime the form is opened)
+' frm is the form name
+'
+    ' Reset the size
+    With NCInput_Form
+        ' Set the form size
+        Height = 620
+        Width = 250
+    End With
+End Sub
 
 Private Sub NC_CancelButton_Click()
     Unload Me
@@ -68,6 +81,7 @@ Sub NC_SubmitButton_Click()
     Sheets(sNewSheetName).Range("C2").Value = NC_SurnameInput.Value
     Sheets(sNewSheetName).Range("E2").Value = NC_FirstNameInput.Value
     Sheets(sNewSheetName).Range("B4").Value = NC_TelephoneInput.Value
+    Sheets(sNewSheetName).Range("E4").Value = NC_EmailInput.Value
     ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
     Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
     
@@ -161,3 +175,7 @@ Sub NC_SubmitButton_Click()
     
 End Sub
 
+
+Private Sub UserForm_Click()
+
+End Sub

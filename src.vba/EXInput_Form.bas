@@ -10,6 +10,19 @@ Dim FootLCount As Integer
 Dim FootWCount As Integer
 Dim HandCount As Integer
 
+Private Sub UserForm_Initialize()
+'
+' Initialize frm
+' (This runs everytime the form is opened)
+' frm is the form name
+'
+    ' Reset the size
+    With EXInput_Form
+        ' Set the form size
+        Height = 600
+        Width = 260
+    End With
+End Sub
 
 ' # Form controls
 Private Sub EX_CancelButton_Click()
@@ -33,12 +46,23 @@ Private Sub EX_SubmitButton_Click()
         Exit Sub
     End If
 
+    ' do validation on each
     Dim bPassed As Boolean
-    bPassed = EX_DataValidation
+    If EX_EnableValidate Then
+        bPassed = EX_DataValidation
+    Else
+        bPassed = True
+    End If
     If Not bPassed Then
         Exit Sub
     End If
     
+    ' confirm box
+    If MsgBox("Are you sure you want to perform this action?", vbYesNo) = vbNo Then
+        Exit Sub
+    End If
+    
+    ' loop through the inputs, if it is filled, update the corresponded cell
     Dim ExFormInputs(1 To 9) As MSForms.TextBox
     Set ExFormInputs(1) = EX_HeadInput
     Set ExFormInputs(2) = EX_NeckInput
@@ -57,7 +81,33 @@ Private Sub EX_SubmitButton_Click()
         End If
     Next i
     
-    ReCalculateSize
+    ' loop through the buttons, only resize the selected ones
+    Dim SelectButtons(1 To 17) As MSForms.ToggleButton
+    Set SelectButtons(1) = EX_GlovesToggle
+    Set SelectButtons(2) = EX_LeatherBootsToggle
+    Set SelectButtons(3) = EX_FTUTunicToggle
+    Set SelectButtons(4) = EX_FTUPantsToggle
+    Set SelectButtons(5) = EX_FTUBootsToggle
+    Set SelectButtons(6) = EX_SocksToggle
+    Set SelectButtons(7) = EX_TieToggle
+    Set SelectButtons(8) = EX_TShirtToggle
+    Set SelectButtons(9) = EX_TunicToggle
+    Set SelectButtons(10) = EX_DressPantsToggle
+    Set SelectButtons(11) = EX_CollaredShirtToggle
+    Set SelectButtons(12) = EX_WedgeToggle
+    Set SelectButtons(13) = EX_BeretToggle
+    Set SelectButtons(14) = EX_TillyToggle
+    Set SelectButtons(15) = EX_BeltToggle
+    Set SelectButtons(16) = EX_TieToggle
+    Set SelectButtons(17) = EX_ParkaToggle
+    
+    Dim SelectedButton As Variant
+    For Each SelectedButton In SelectButtons
+        If SelectedButton.Value Then
+            Debug.Print SelectedButton.Caption
+            ReCalculateSize (SelectedButton.Caption)
+        End If
+    Next SelectedButton
     
     Unload Me
 End Sub

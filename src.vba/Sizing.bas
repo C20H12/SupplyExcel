@@ -2721,7 +2721,7 @@ Function GetSize(ItemType As String, InputData As Collection) As String
     If ItemType = "Tunic" Then
         Set SizingData = GetSizingData_tunics
     ElseIf ItemType = "Collar Shirt" Then
-        If InputData.Item("IsMale") Then
+        If InputData.item("IsMale") Then
             Set SizingData = GetSizingData_mshirts
         Else
             Set SizingData = GetSizingData_fshirts
@@ -2729,7 +2729,7 @@ Function GetSize(ItemType As String, InputData As Collection) As String
     ElseIf ItemType = "T-Shirt" Then
         Set SizingData = GetSizingData_tshirts
     ElseIf ItemType = "Dress Pants" Then
-        If InputData.Item("IsMale") Then
+        If InputData.item("IsMale") Then
             Set SizingData = GetSizingData_mpants
         Else
             Set SizingData = GetSizingData_fpants
@@ -2770,9 +2770,9 @@ Function GetSize(ItemType As String, InputData As Collection) As String
     Dim Level As Integer
     Level = 0
     Dim Data As Collection
-    Set Data = SizingData.Item("data")
+    Set Data = SizingData.item("data")
     Dim SizeProperties() As String
-    SizeProperties = SizingData.Item("header")
+    SizeProperties = SizingData.item("header")
     
     
     GetSize = p_GetSize(Data, Level, SizeProperties, InputData)
@@ -2781,7 +2781,7 @@ End Function
 
 Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps As Variant, InputData As Collection)
     Dim Sizes() As Variant
-    Sizes = LevelData.Item("Keys")
+    Sizes = LevelData.item("Keys")
     
     For i = 0 To UBound(Sizes)
 
@@ -2789,7 +2789,7 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
         
         ' Get the size's name from the header, then get the associated measured size
         Dim MeasuredSize As Double
-        MeasuredSize = CDbl(InputData.Item(SizeProps(Level)))
+        MeasuredSize = CDbl(InputData.item(SizeProps(Level)))
         
         ' Get the closest larger size than the measured size
         If MeasuredSize <= Sizes(i) Then
@@ -2797,9 +2797,9 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
             StrSize = CStr(Sizes(i))
             
             ' Check if there is another level, if so, repeat the same process
-            If TypeOf LevelData.Item(StrSize) Is Collection Then
+            If TypeOf LevelData.item(StrSize) Is Collection Then
                 Dim Result As Variant
-                Result = p_GetSize(LevelData.Item(StrSize), Level + 1, SizeProps, InputData)
+                Result = p_GetSize(LevelData.item(StrSize), Level + 1, SizeProps, InputData)
                 'Debug.Print Result
                 ' If the result is empty, do not return
                 If Not IsEmpty(Result) Then
@@ -2811,7 +2811,7 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
             ' return the result value
             Else
                 'Debug.Print 1, LevelData.Item(StrSize)
-                p_GetSize = LevelData.Item(StrSize)
+                p_GetSize = LevelData.item(StrSize)
                 Exit Function
             End If
         End If

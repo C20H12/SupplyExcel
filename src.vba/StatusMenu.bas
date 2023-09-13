@@ -1,13 +1,14 @@
-
 Sub ScanAllSheetsAndPrioritizeLabels()
     Dim SearchStrings As Variant
     Dim sh As Worksheet
     Dim wsMenu As Worksheet
     Dim pickupFound As Boolean
     Dim excludedSheetNames As Variant
+    Dim barcode As String ' Move the barcode variable declaration outside the loop
+    Dim foundStatus As String ' Move the foundStatus variable declaration outside the loop
     
     ' Define the search strings in the new order of priority
-    SearchStrings = Array("UNP", "Ready To Order", "Ordered", "Pick Up", "Complete", "Returned")
+    SearchStrings = Array("UNP", "Pick Up", "Ready To Order", "Ordered", "Complete", "Returned")
     
     ' Define the names of sheets to exclude from the search
     excludedSheetNames = Array("Menu", "Userform", "Template")
@@ -30,8 +31,10 @@ Sub ScanAllSheetsAndPrioritizeLabels()
         ' Check if the sheet should be excluded
         If Not IsInArray(sh.Name, excludedSheetNames) Then
             ' Extract the unique barcode from cell G2
-            Dim barcode As String
-            barcode = sh.Cells(2, "G").Value
+            barcode = sh.Cells(2, "G").Value ' Move this line here
+            
+            ' Initialize a string to store the found statuses
+            foundStatus = "" ' Move this line here
             
             ' Loop through each search string in the new order of priority
             For Each SearchString In SearchStrings
@@ -47,17 +50,34 @@ Sub ScanAllSheetsAndPrioritizeLabels()
                     SearchFormat:=False)
                 
                 If Not foundCell Is Nothing Then
-                    ' If found, update the Menu sheet with the label
-                    Dim menuCell As Range
-                    Set menuCell = wsMenu.Columns("E").Find(What:=barcode, LookIn:=xlValues, LookAt:=xlWhole)
-                    If Not menuCell Is Nothing Then
-                        wsMenu.Cells(menuCell.Row, "C").Value = SearchString
-                        ' Set the pickupFound flag to True
-                        pickupFound = True
-                        Exit For ' Exit the loop once a label is found
+                    ' If found, add the status to the foundStatus string
+                    If foundStatus <> "" Then
+                        foundStatus = foundStatus & ", "
                     End If
+                    foundStatus = foundStatus & SearchString
                 End If
             Next SearchString
+            
+            ' If "Ordered," "Ready To Order," or "Pick Up" statuses are found,
+            ' update the Menu sheet with the concatenated statuses
+            If foundStatus <> "" And (InStr(foundStatus, "Ordered") <> 0 Or InStr(foundStatus, "Ready To Order") <> 0 Or InStr(foundStatus, "Pick Up") <> 0) Then
+                Dim menuCell As Range
+                Set menuCell = wsMenu.Columns("E").Find(What:=barcode, LookIn:=xlValues, LookAt:=xlWhole)
+                If Not menuCell Is Nothing Then
+                    wsMenu.Cells(menuCell.Row, "C").Value = foundStatus
+                    ' Set the pickupFound flag to True
+                    pickupFound = True
+                End If
+            ElseIf foundStatus <> "" Then
+                ' If other statuses are found (UNP, Complete, or Returned),
+                ' prioritize and update the Menu sheet with the first found status
+                Set menuCell = wsMenu.Columns("E").Find(What:=barcode, LookIn:=xlValues, LookAt:=xlWhole)
+                If Not menuCell Is Nothing Then
+                    wsMenu.Cells(menuCell.Row, "C").Value = Split(foundStatus, ", ")(0) ' Prioritize the first status
+                    ' Set the pickupFound flag to True
+                    pickupFound = True
+                End If
+            End If
         End If
     Next
     
@@ -68,13 +88,15 @@ Sub ScanAllSheetsAndPrioritizeLabels()
 End Sub
 
 Function IsInArray(val As Variant, arr As Variant) As Boolean
-    Dim element As Variant
-    For Each element In arr
-        If element = val Then
+    Dim item As Variant
+    For Each item In arr
+        If item = val Then
             IsInArray = True
             Exit Function
         End If
-    Next element
+    Next item
     IsInArray = False
 End Function
+
+
 

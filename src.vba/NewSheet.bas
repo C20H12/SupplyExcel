@@ -25,6 +25,7 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
     Range("I6").Select
     Columns("G:G").ColumnWidth = 16
     Range("J5").Select
-    
+    Columns("E:E").ColumnWidth = 15
+    Range("J5").Select
    
 End Sub

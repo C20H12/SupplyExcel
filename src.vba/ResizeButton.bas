@@ -1,4 +1,12 @@
-Function ReCalculateSize()
+Sub Resize()
+    ' confirm box
+    If MsgBox("Are you sure you want to perform this action?", vbYesNo) = vbNo Then
+        Exit Sub
+    End If
+    
+    ReCalculateSize
+End Sub
+Sub ReCalculateSize(Optional ItemNameToChange As String)
     ' # Getting the sizing information
     Dim MeasuredSizes As Collection
     Set MeasuredSizes = New Collection
@@ -14,16 +22,31 @@ Function ReCalculateSize()
     MeasuredSizes.Add ActiveSheet.Range("G4").Value = "Male", "IsMale"
     
     For i = 6 To 24
-        Dim SizeName As String
-        SizeName = ActiveSheet.Range("B" & i).Value
-        Dim ReturnedSize As String
-        ReturnedSize = GetSize(SizeName, MeasuredSizes)
-        Dim SplittedSize() As String
-        SplittedSize = Split(ReturnedSize, "===")
-
-        If Not Len(Trim(SizeName)) = 0 Then
-            ActiveSheet.Range("E" & i).Value = SplittedSize(0)
-            ActiveSheet.Range("A" & i).Value = SplittedSize(1)
+        Dim ItemName As String
+        ItemName = ActiveSheet.Range("B" & i).Value
+        
+        ' only check non empty cells in the item names column
+        If Not IsStringEmpty(ItemName) Then
+            
+            ' if nothing is passed in, do sizing OR if an exact item name is passed in, it needs to match
+            If IsStringEmpty(ItemNameToChange) Or (Not IsStringEmpty(ItemNameToChange) And ItemNameToChange = ItemName) Then
+                Dim ReturnedSize As String
+                ReturnedSize = GetSize(ItemName, MeasuredSizes)
+                
+                If Not IsStringEmpty(ReturnedSize) Then
+                    Dim SplittedSize() As String
+                    SplittedSize = Split(ReturnedSize, "===")
+                    
+                    ' if size has changed, change status to unp
+                    ' Use .Text so that fractions aren't converted to decimals
+                    If Not SplittedSize(0) = ActiveSheet.Range("E" & i).Text Then
+                        ActiveSheet.Range("G" & i).Value = "UNP"
+                    End If
+    
+                    ActiveSheet.Range("E" & i).Value = SplittedSize(0)
+                    ActiveSheet.Range("A" & i).Value = SplittedSize(1)
+                End If
+            End If
         End If
     Next i
-End Function
+End Sub

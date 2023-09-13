@@ -89,6 +89,7 @@ Sub NC_Experiment()
     NCInput_Form.NC_SurnameInput.Value = generatedLastName
     NCInput_Form.NC_FirstNameInput.Value = generatedFirstName
     NCInput_Form.NC_TelephoneInput.Value = randomPhoneNumber
+    NCInput_Form.NC_EmailInput.Value = "Jesus@hotmail.com"
     NCInput_Form.NC_HeadInput.Value = GenerateRandomMeasurement(19, 26)
     NCInput_Form.NC_NeckInput.Value = GenerateRandomMeasurement(12.5, 20)
     NCInput_Form.NC_ChestInput.Value = GenerateRandomMeasurement(24, 64)
