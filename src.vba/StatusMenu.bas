@@ -7,7 +7,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     Dim excludedSheetNames As Variant
     
     ' Define the search strings in the new order of priority
-    SearchStrings = Array("UNP", "Ready To Order", "Ordered", "Pick Up", "Complete")
+    SearchStrings = Array("UNP", "Ready To Order", "Ordered", "Pick Up", "Complete", "Returned")
     
     ' Define the names of sheets to exclude from the search
     excludedSheetNames = Array("Menu", "Userform", "Template")

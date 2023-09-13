@@ -11,6 +11,24 @@ Sub Terminate()
     ' Get reference to the current sheet
     Set ws = ActiveSheet
     
+    ' Add confirm box when deleting
+    If ws.Name = "Template" Then
+        MsgBox "Cannot delete the template"
+        Exit Sub
+    Else
+        If MsgBox("Are you sure you want to perform this action?", vbYesNo) = vbNo Then
+            Exit Sub
+        End If
+    End If
+    
+    ' Only works when all items are set to returned
+    For Each c In Union(ws.Range("G6:G26"), ws.Range("G30:G34")).Cells
+        If Not IsStringEmpty(c.Value) And Not c.Value = "Returned" Then
+            MsgBox "There are still unreturned items."
+            Exit Sub
+        End If
+    Next c
+    
     ' Get the currentID from cell G2
     currentID = ws.Range("G2").Value
     

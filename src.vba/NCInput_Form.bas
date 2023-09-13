@@ -1,5 +1,6 @@
+
+
 Private Sub NC_CancelButton_Click()
-    ' closes the form
     Unload Me
 End Sub
 
@@ -107,8 +108,15 @@ Sub NC_SubmitButton_Click()
         If Not IsStringEmpty(SizeName) Then
             Dim ReturnedSize As String
             ReturnedSize = GetSize(SizeName, MeasuredSizes)
-
-            Sheets(sNewSheetName).Range("E" & i).Value = ReturnedSize
+            If Not IsStringEmpty(ReturnedSize) Then
+                Dim SplittedSize() As String
+                SplittedSize = Split(ReturnedSize, "===")
+                Debug.Print ReturnedSize
+                Debug.Print ReturnedSize, SplittedSize(0)
+    
+                Sheets(sNewSheetName).Range("E" & i).Value = SplittedSize(0)
+                Sheets(sNewSheetName).Range("A" & i).Value = SplittedSize(1)
+            End If
         End If
     Next i
 

@@ -18,9 +18,12 @@ Function ReCalculateSize()
         SizeName = ActiveSheet.Range("B" & i).Value
         Dim ReturnedSize As String
         ReturnedSize = GetSize(SizeName, MeasuredSizes)
-        
+        Dim SplittedSize() As String
+        SplittedSize = Split(ReturnedSize, "===")
+
         If Not Len(Trim(SizeName)) = 0 Then
-            ActiveSheet.Range("E" & i).Value = ReturnedSize
+            ActiveSheet.Range("E" & i).Value = SplittedSize(0)
+            ActiveSheet.Range("A" & i).Value = SplittedSize(1)
         End If
     Next i
 End Function
