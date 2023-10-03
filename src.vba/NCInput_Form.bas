@@ -125,8 +125,8 @@ Sub NC_SubmitButton_Click()
             If Not IsStringEmpty(ReturnedSize) Then
                 Dim SplittedSize() As String
                 SplittedSize = Split(ReturnedSize, "===")
-                Debug.Print ReturnedSize
-                Debug.Print ReturnedSize, SplittedSize(0)
+               ' Debug.Print ReturnedSize
+               ' Debug.Print ReturnedSize, SplittedSize(0)
     
                 Sheets(sNewSheetName).Range("E" & i).Value = SplittedSize(0)
                 Sheets(sNewSheetName).Range("A" & i).Value = SplittedSize(1)
@@ -161,7 +161,7 @@ Sub NC_SubmitButton_Click()
     ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
         Clear
     ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
-        Add2 Key:=Range("MenuTable[[#All],[Surname]]"), SortOn:=xlSortOnValues, _
+        Add Key:=Range("MenuTable[[#All],[Surname]]"), SortOn:=xlSortOnValues, _
         Order:=xlAscending, DataOption:=xlSortNormal
     With ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort
         .Header = xlYes

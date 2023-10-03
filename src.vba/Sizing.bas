@@ -2692,25 +2692,28 @@ Private Function GetSizingData_tilly() As Collection
     Set GetSizingData_tilly = SizingMap_tilly
 End Function
 
+
 Private Function GetSizingData_gloves() As Collection
     Dim SizingMap_gloves As Collection
     Set SizingMap_gloves = New Collection
-    Dim Value_data_33354f As Collection
-    Set Value_data_33354f = New Collection
-    Dim Keys_c0ee0a() As Variant
-    Keys_c0ee0a = Array(0, 6, 7, 8, 9)
-    Value_data_33354f.Add Keys_c0ee0a, "Keys"
-    Value_data_33354f.Add "(2XS / 2TP)===1001-21-154-1000", "6"
-    Value_data_33354f.Add "(XS / TP)===1001-21-154-2000", "7"
-    Value_data_33354f.Add "(JR / JR)===8415-20-006-8915", "8"
-    Value_data_33354f.Add "(S/M - P/M)===8415-20-006-8916", "9"
-    Value_data_33354f.Add "(L/XL - G/TG)===8415-20-006-8917", "0"
-    SizingMap_gloves.Add Value_data_33354f, "data"
-    Dim Value_header_1e91cb() As String
-    Value_header_1e91cb = Split("hand,size", ",")
-    SizingMap_gloves.Add Value_header_1e91cb, "header"
+    Dim Value_data_fa2baa As Collection
+    Set Value_data_fa2baa = New Collection
+    Dim Keys_4e3583() As Variant
+    Keys_4e3583 = Array(6, 7, 8, 9, 10)
+    Value_data_fa2baa.Add Keys_4e3583, "Keys"
+    Value_data_fa2baa.Add "(2XS / 2TP)===1001-21-154-1000", "6"
+    Value_data_fa2baa.Add "(XS / TP)===1001-21-154-2000", "7"
+    Value_data_fa2baa.Add "(JR / JR)===8415-20-006-8915", "8"
+    Value_data_fa2baa.Add "(S/M - P/M)===8415-20-006-8916", "9"
+    Value_data_fa2baa.Add "(L/XL - G/TG)===8415-20-006-8917", "10"
+    SizingMap_gloves.Add Value_data_fa2baa, "data"
+    Dim Value_header_d2a05d() As String
+    Value_header_d2a05d = Split("hand,size", ",")
+    SizingMap_gloves.Add Value_header_d2a05d, "header"
     Set GetSizingData_gloves = SizingMap_gloves
 End Function
+
+
 
 
 Function GetSize(ItemType As String, InputData As Collection) As String
