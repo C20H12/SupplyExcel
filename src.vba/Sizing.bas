@@ -2317,7 +2317,7 @@ Private Function GetSizingData_ties() As Collection
     Keys_0532b3 = Array(67, 73, 99)
     Value_data_613eb5.Add Keys_0532b3, "Keys"
     Value_data_613eb5.Add "R (50 inch)===8440-21-905-7384", "67"
-    Value_data_613eb5.Add "L (66 inch)===8440-21-899-1182", "73"
+    Value_data_613eb5.Add "L (56 inch)===8440-21-899-1182", "73"
     Value_data_613eb5.Add "XL (60 inch)===8440-20-005-2931", "99"
     SizingMap_ties.Add Value_data_613eb5, "data"
     Dim Value_header_7eeedf() As String
@@ -2783,10 +2783,10 @@ Function GetSize(ItemType As String, InputData As Collection) As String
 End Function
 
 Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps As Variant, InputData As Collection)
-    Dim Sizes() As Variant
-    Sizes = LevelData.item("Keys")
+    Dim sizes() As Variant
+    sizes = LevelData.item("Keys")
     
-    For i = 0 To UBound(Sizes)
+    For i = 0 To UBound(sizes)
 
         'Debug.Print i, InputData.Item(SizeProps(Level)), Sizes(i)
         
@@ -2795,9 +2795,9 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
         MeasuredSize = CDbl(InputData.item(SizeProps(Level)))
         
         ' Get the closest larger size than the measured size
-        If MeasuredSize <= Sizes(i) Then
+        If MeasuredSize <= sizes(i) Then
             Dim StrSize As String
-            StrSize = CStr(Sizes(i))
+            StrSize = CStr(sizes(i))
             
             ' Check if there is another level, if so, repeat the same process
             If TypeOf LevelData.item(StrSize) Is Collection Then
@@ -2822,52 +2822,97 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
 
 End Function
 
-Function GetNSNFromSize(ItemType As String, Size As String, Optional LevelData As Collection = Nothing, Optional Level As Integer = 0) As String
+Function GetNSNFromSize(ItemType As String, Size As String, IsMale As Boolean) As String
     Dim SizingData As Collection
     Dim Data As Collection
-    Dim i As Integer
+    Dim TargetSize As String
+    
+    ' Get the sizing data for the given item type
+    If ItemType = "Tunic" Then
+        Set SizingData = GetSizingData_tunics
+    ElseIf ItemType = "Collar Shirt" Then
+        If IsMale Then
+            Set SizingData = GetSizingData_mshirts
+        Else
+            Set SizingData = GetSizingData_fshirts
+        End If
+    ElseIf ItemType = "T-Shirt" Then
+        Set SizingData = GetSizingData_tshirts
+    ElseIf ItemType = "Dress Pants" Then
+        If IsMale Then
+            Set SizingData = GetSizingData_mpants
+        Else
+            Set SizingData = GetSizingData_fpants
+        End If
+    ElseIf ItemType = "Wedge" Then
+        Set SizingData = GetSizingData_wedges
+    ElseIf ItemType = "Tie" Then
+        Set SizingData = GetSizingData_ties
+    ElseIf ItemType = "Belt" Then
+        Set SizingData = GetSizingData_belts
+    ElseIf ItemType = "Socks" Then
+        Set SizingData = GetSizingData_socks
+    ElseIf ItemType = "Leather Boots" Then
+        Set SizingData = GetSizingData_boots
+    ' ignore toque
+    ElseIf ItemType = "Tilly" Then
+        Set SizingData = GetSizingData_tilly
+    ElseIf ItemType = "Parka" Then
+        Set SizingData = GetSizingData_parkas
+    ElseIf ItemType = "Gloves" Then
+        Set SizingData = GetSizingData_gloves
+    ElseIf ItemType = "Beret" Then
+        Set SizingData = GetSizingData_FTUberets
+    ElseIf ItemType = "FTU Tunic" Then
+        Set SizingData = GetSizingData_FTUtunics
+    ElseIf ItemType = "FTU Pants" Then
+        Set SizingData = GetSizingData_FTUpants
+    ElseIf ItemType = "FTU Boots" Then
+        Set SizingData = GetSizingData_FTUboots
+    Else
+        GetNSNFromSize = "Invalid"
+        Exit Function
+    End If
+    
+    Set Data = SizingData.item("data")
+    TargetSize = Size
+    GetNSNFromSize = p_GetNSNFromSize(Data, TargetSize)
+End Function
+
+Function p_GetNSNFromSize(LevelData As Collection, TargetSize As String) As String
     Dim Key As Variant
-    Dim Value As String
+    Dim StrKey As String
     Dim SizeAndNSN() As String
     Dim NSN As String
-
-    ' Get the sizing data for the given item type
-    If LevelData Is Nothing Then
-        If ItemType = "Tunic" Then
-            Set SizingData = GetSizingData_tunics
-        ElseIf ItemType = "Collar Shirt" Then
-            If InputData.item("IsMale") Then
-                Set SizingData = GetSizingData_mshirts
-            Else
-                Set SizingData = GetSizingData_fshirts
-            End If
-        ' Add more item types here as needed
-        End If
-        Set LevelData = SizingData.Item("data")
-    End If
-
-    ' Loop through the keys in the level data collection
-    For Each Key In LevelData.Item("Keys")
-        ' Get the value for the current key
-        Value = LevelData.Item(CStr(Key))
+    Dim NSNResult As String
+    
+    For Each Key In LevelData.item("Keys")
+        StrKey = CStr(Key)
+        'Debug.Print StrKey
         ' If the value is a collection, recursively search the next level
-        If TypeOf Value Is Collection Then
-            NSN = GetNSNFromSize(ItemType, Size, Value, Level + 1)
+        If TypeOf LevelData.item(StrKey) Is Collection Then
+            NSN = p_GetNSNFromSize(LevelData.item(StrKey), TargetSize)
+            
             ' If a NSN was found, return it
-            If NSN <> "" Then
-                Exit For
+            If Not IsStringEmpty(NSN) Then
+                p_GetNSNFromSize = NSN
+                Exit Function
             End If
-        ' If the value is a string, check if it matches the given size
         Else
+            NSNResult = LevelData.item(StrKey)
+        End If
+
+        If Not IsStringEmpty(NSNResult) Then
+        
             ' Split the value into size and NSN
-            SizeAndNSN = Split(Value, "===")
+            'Debug.Print NSNResult, TargetSize
+            SizeAndNSN = Split(NSNResult, "===")
+            'Debug.Print "split", SizeAndNSN(0)
             ' If the size matches the given size, return the NSN
-            If SizeAndNSN(0) = Size Then
-                NSN = SizeAndNSN(1)
-                Exit For
+            If SizeAndNSN(0) = TargetSize Then
+                p_GetNSNFromSize = SizeAndNSN(1)
+                Exit Function
             End If
         End If
     Next Key
-
-    GetNSNFromSize = NSN
 End Function

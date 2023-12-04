@@ -1,6 +1,6 @@
 Sub ScanAllSheetsAndPrioritizeLabels()
     Dim SearchStrings As Variant
-    Dim Sh As Worksheet
+    Dim sh As Worksheet
     Dim wsMenu As Worksheet
     Dim pickupFound As Boolean
     Dim excludedSheetNames As Variant
@@ -27,11 +27,11 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     pickupFound = False
     
     ' Loop through all sheets
-    For Each Sh In ActiveWorkbook.Worksheets
+    For Each sh In ActiveWorkbook.Worksheets
         ' Check if the sheet should be excluded
-        If Not IsInArray(Sh.Name, excludedSheetNames) Then
+        If Not IsInArray(sh.Name, excludedSheetNames) Then
             ' Extract the unique barcode from cell G2
-            barcode = Sh.Cells(2, "G").Value ' Move this line here
+            barcode = sh.Cells(2, "G").Value ' Move this line here
             
             ' Initialize a string to store the found statuses
             foundStatus = "" ' Move this line here
@@ -40,8 +40,8 @@ Sub ScanAllSheetsAndPrioritizeLabels()
             For Each SearchString In SearchStrings
                 ' Find the search string in the sheet
                 Dim foundCell As Range
-                Set foundCell = Sh.Cells.Find(What:=SearchString, _
-                    After:=Sh.Cells(1, 1), _
+                Set foundCell = sh.Cells.Find(What:=SearchString, _
+                    After:=sh.Cells(1, 1), _
                     LookIn:=xlValues, _
                     LookAt:=xlPart, _
                     SearchOrder:=xlByRows, _

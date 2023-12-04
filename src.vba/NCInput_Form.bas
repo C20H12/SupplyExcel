@@ -18,9 +18,12 @@ Private Sub NC_CancelButton_Click()
 End Sub
 
 Sub NC_SubmitButton_Click()
+
+    ' so it does not trigger the cell change events, revert this setting after
+    Application.EnableEvents = False
     
     ' # Validate all the input fields, skip if disabled
-    Dim ValidateResults(1 To 23) As Boolean
+    Dim ValidateResults(1 To 23) As String
     
     ' Validate NC_FirstNameInput, NC_SurnameInput, NC_RankInput
     ValidateResults(1) = ValidateText(NC_FirstNameInput)
@@ -55,14 +58,17 @@ Sub NC_SubmitButton_Click()
         ValidateResults(23) = ValidateRange(NC_HandLInput, 6, 10)
     End If
 
-    ' Check if any validation fails, early return
+    ' Check if any validation fails, display error message (first encountered) and early return
     Dim ValidateTo As Integer
     ValidateTo = 14
     If NC_EnableValidate Then
         ValidateTo = 23
     End If
     For i = 1 To ValidateTo
-        If Not ValidateResults(i) Then
+        Dim ValidateResultMsg As String
+        ValidateResultMsg = ValidateResults(i)
+        If Not IsStringEmpty(ValidateResultMsg) Then
+            MsgBox ValidateResultMsg, vbExclamation, "Input Error"
             Exit Sub
         End If
     Next i
@@ -133,7 +139,6 @@ Sub NC_SubmitButton_Click()
             End If
         End If
     Next i
-
     
     ' # Insert an entry to the menu that holds all sheets
     Dim ws As Worksheet
@@ -141,7 +146,7 @@ Sub NC_SubmitButton_Click()
     
     ' Find the next empty row in column B of the "Menu" worksheet
     Dim empty_row As Long
-    empty_row = ws.Cells(ws.Rows.Count, 2).End(xlUp).Row + 1
+    empty_row = ws.Cells(ws.Rows.count, 2).End(xlUp).Row + 1
     
     ' Write the value from NC_FirstNameInput to the found empty row
     ws.Cells(empty_row, 1).Value = NCInput_Form.NC_SurnameInput.Value
@@ -170,7 +175,9 @@ Sub NC_SubmitButton_Click()
         .SortMethod = xlPinYin
         .Apply
     End With
-                           
+    
+    Application.EnableEvents = True
+    
     Unload Me
     
 End Sub

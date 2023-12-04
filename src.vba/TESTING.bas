@@ -2,6 +2,7 @@ Sub Testing()
     
 
     
+    
     ' Dim wb As Workbook
 
     ' Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsx")
@@ -46,4 +47,9 @@ Sub Testing()
     ' Debug.Print "18410-21-912-3651" Like "####*-##-###-####"
     ' Debug.Print "a8410a-21-912-3651" Like "####*-##-###-####"
 
+
+    Debug.Print GetNSNFromSize("Tunic", "8062", True)
+    Debug.Print GetNSNFromSize("Tunic", "9999", True)
+    Debug.Print GetNSNFromSize("Collar Shirt", "13", True)
+    Debug.Print GetNSNFromSize("Parka", "6432", True)
 End Sub
