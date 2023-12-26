@@ -7,6 +7,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     Dim barcode As String ' Move the barcode variable declaration outside the loop
     Dim foundStatus As String ' Move the foundStatus variable declaration outside the loop
     
+    'Testing Git Commit
     ' Define the search strings in the new order of priority
     SearchStrings = Array("UNP", "Pick Up", "Ready To Order", "Ordered", "Complete", "Returned")
     
