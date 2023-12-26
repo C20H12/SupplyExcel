@@ -1,3 +1,4 @@
+
 Option Explicit
 
 Dim HeadCount As Integer
@@ -17,7 +18,7 @@ Private Sub UserForm_Initialize()
 ' frm is the form name
 '
     ' Reset the size
-    With EXInput_Form
+    With ExchangeFormOnly
         ' Set the form size
         Height = 600
         Width = 260
@@ -64,15 +65,15 @@ Private Sub EX_SubmitButton_Click()
     
     ' loop through the inputs, if it is filled, update the corresponded cell
     Dim ExFormInputs(1 To 9) As MSForms.TextBox
-    Set ExFormInputs(1) = EX_HeadInput
-    Set ExFormInputs(2) = EX_NeckInput
-    Set ExFormInputs(3) = EX_ChestInput
-    Set ExFormInputs(4) = EX_WaistInput
-    Set ExFormInputs(5) = EX_HipsInput
-    Set ExFormInputs(6) = EX_HeightInput
-    Set ExFormInputs(7) = EX_FootLInput
-    Set ExFormInputs(8) = EX_FootWInput
-    Set ExFormInputs(9) = EX_HandLInput
+    Set ExFormInputs(1) = SingleEX_HeadInput
+    Set ExFormInputs(2) = SingleEX_NeckInput
+    Set ExFormInputs(3) = SingleEX_ChestInput
+    Set ExFormInputs(4) = SingleEX_WaistInput
+    Set ExFormInputs(5) = SingleEX_HipsInput
+    Set ExFormInputs(6) = SingleEX_HeightInput
+    Set ExFormInputs(7) = SingleEX_FootLInput
+    Set ExFormInputs(8) = SingleEX_FootWInput
+    Set ExFormInputs(9) = SingleEX_HandLInput
 
     Dim i As Integer
     For i = 1 To 9
@@ -83,23 +84,23 @@ Private Sub EX_SubmitButton_Click()
     
     ' loop through the buttons, only resize the selected ones
     Dim SelectButtons(1 To 17) As MSForms.ToggleButton
-    Set SelectButtons(1) = EX_GlovesToggle
-    Set SelectButtons(2) = EX_LeatherBootsToggle
-    Set SelectButtons(3) = EX_FTUTunicToggle
-    Set SelectButtons(4) = EX_FTUPantsToggle
-    Set SelectButtons(5) = EX_FTUBootsToggle
-    Set SelectButtons(6) = EX_SocksToggle
-    Set SelectButtons(7) = EX_TieToggle
-    Set SelectButtons(8) = EX_TShirtToggle
-    Set SelectButtons(9) = EX_TunicToggle
-    Set SelectButtons(10) = EX_DressPantsToggle
-    Set SelectButtons(11) = EX_CollaredShirtToggle
-    Set SelectButtons(12) = EX_WedgeToggle
-    Set SelectButtons(13) = EX_BeretToggle
-    Set SelectButtons(14) = EX_TillyToggle
-    Set SelectButtons(15) = EX_BeltToggle
-    Set SelectButtons(16) = EX_TieToggle
-    Set SelectButtons(17) = EX_ParkaToggle
+    Set SelectButtons(1) = SingleEX_GlovesToggle
+    Set SelectButtons(2) = SingleEX_LeatherBootsToggle
+    Set SelectButtons(3) = SingleEX_FTUTunicToggle
+    Set SelectButtons(4) = SingleEX_FTUPantsToggle
+    Set SelectButtons(5) = SingleEX_FTUBootsToggle
+    Set SelectButtons(6) = SingleEX_SocksToggle
+    Set SelectButtons(7) = SingleEX_TieToggle
+    Set SelectButtons(8) = SingleEX_TShirtToggle
+    Set SelectButtons(9) = SingleEX_TunicToggle
+    Set SelectButtons(10) = SingleEX_DressPantsToggle
+    Set SelectButtons(11) = SingleEX_CollaredShirtToggle
+    Set SelectButtons(12) = SingleEX_WedgeToggle
+    Set SelectButtons(13) = SingleEX_BeretToggle
+    Set SelectButtons(14) = SingleEX_TillyToggle
+    Set SelectButtons(15) = SingleEX_BeltToggle
+    Set SelectButtons(16) = SingleEX_TieToggle
+    Set SelectButtons(17) = SingleEX_ParkaToggle
     
     Dim SelectedButton As Variant
     For Each SelectedButton In SelectButtons

@@ -1,18 +1,3 @@
-Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
-    ' check the cells from e6 to e24 (sizes), if changed, run code
-    Dim RangeToCheck As Range
-    Set RangeToCheck = sh.Range("E6:E24")
-
-    If Not Application.Intersect(RangeToCheck, Target) Is Nothing Then
-        Dim NSNResult As String
-        NSNResult = GetNSNFromSize(Target.Offset(0, -3).Value, Target.Value, sh.Range("G4").Value = "Male")
-        If IsStringEmpty(NSNResult) Then
-            NSNResult = "Invalid size"
-        End If
-        ' move left 3 col to A, then insert the result
-        Target.Offset(0, -4).Value = NSNResult
-    End If
-End Sub
 
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)

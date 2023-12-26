@@ -1,9 +1,9 @@
 Sub InventoryInteract()
     ' get the selected nsn
-    Dim NSN As String
-    NSN = ActiveCell.Value
+    Dim nsn As String
+    nsn = ActiveCell.Value
     
-    If Not NSN Like "####*-##-###-####" Then
+    If Not nsn Like "####*-##-###-####" Then
         MsgBox "Selected value is not a NSN"
         Exit Sub
     End If
@@ -16,9 +16,9 @@ Sub InventoryInteract()
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
     
-    For Each sh In wb.Worksheets
-        With sh.UsedRange
-            Set Loc = .Cells.Find(What:=NSN)
+    For Each Sh In wb.Worksheets
+        With Sh.UsedRange
+            Set Loc = .Cells.Find(What:=nsn)
             If Not Loc Is Nothing Then
                 Exit For
             End If

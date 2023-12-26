@@ -5,7 +5,6 @@ Sub ManualBackup()
     Dim supplyFolderPath As String
     Dim savePath As String
     
-    'David was here
     ' Get the current date in the "mm-dd-yyyy" format
     currentDate = Format(Now, "mm-dd-yyyy_hh_nn_ss_am/pm")
     
