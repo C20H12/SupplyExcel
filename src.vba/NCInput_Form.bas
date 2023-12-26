@@ -1,4 +1,8 @@
 
+Private Sub NC_RankLabel_Click()
+
+End Sub
+
 Private Sub UserForm_Initialize()
 '
 ' Initialize frm
@@ -28,8 +32,8 @@ Sub NC_SubmitButton_Click()
     ValidateResults(3) = ValidateText(NC_RankInput)
 
     ' Validate NC_TelephoneInput
-    ValidateResults(4) = ValidateNumber(NC_TelephoneInput)
-    ValidateResults(5) = ValidateCustom(NC_TelephoneInput, Len(NC_TelephoneInput.Value) <> 10, "Telephone Number must be 10 digits.")
+    ValidateResults(4) = True 'ValidateNumber(NC_TelephoneInput)
+    ValidateResults(5) = True 'ValidateCustom(NC_TelephoneInput, Len(NC_TelephoneInput.Value) <> 10, "Telephone Number must be 10 digits.")
     
     ' Validate each size input to check if input is a number
     ValidateResults(6) = ValidateNumber(NC_HeadInput)
@@ -63,6 +67,7 @@ Sub NC_SubmitButton_Click()
     End If
     For i = 1 To ValidateTo
         If Not ValidateResults(i) Then
+            Exit For
             Exit Sub
         End If
     Next i

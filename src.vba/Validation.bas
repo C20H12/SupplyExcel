@@ -18,6 +18,15 @@ Function ValidateNumber(InputBox As MSForms.TextBox) As Boolean
     End If
 End Function
 
+Function ValidateDate(InputBox As MSForms.TextBox) As Boolean
+    If Not IsDate(InputBox.Value) Then
+        MsgBox "Please enter a date(mm/dd/yyyy) For " & InputBox.Tag, vbExclamation, "Input Error"
+        InputBox.SetFocus
+        ValidateDate = False
+    Else
+        ValidateDate = True
+End Function
+
 Function ValidateRange(InputBox As MSForms.TextBox, Min As Double, Max As Double) As Boolean
     If IsStringEmpty(InputBox.Value) Or Not IsNumeric(InputBox.Value) Then
         ValidateRange = False

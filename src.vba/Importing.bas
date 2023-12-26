@@ -1,11 +1,14 @@
 Sub Importing()
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.Sheets("Importing")
     
+    Dim EndNum As Integer
+    EndNum = ws.Cells(ws.Rows.Count, "B").End(xlUp).Row
     
+    MsgBox (EndNum)
+
     ' loop over the used rows in this sheet
-    For ii = 2 To ThisWorkbook.Sheets("Importing").UsedRange.Rows.Count
-    
-        Dim ws As Worksheet
-        Set ws = ActiveWorkbook.Sheets("Importing")
+    For ii = 2 To EndNum
         
         ' Map all the variables needed to a cell in the row
         Dim FirstName As String
@@ -50,8 +53,8 @@ Sub Importing()
         Sheets(sNewSheetName).Range("B2").Value = Rank
         Sheets(sNewSheetName).Range("C2").Value = LastName
         Sheets(sNewSheetName).Range("E2").Value = FirstName
-        Sheets(sNewSheetName).Range("B4").Value = "9999999999"
         Sheets(sNewSheetName).Range("E4").Value = Email
+        
         ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
         Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
         
