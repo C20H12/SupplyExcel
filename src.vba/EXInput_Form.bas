@@ -104,7 +104,7 @@ Private Sub EX_SubmitButton_Click()
     Dim SelectedButton As Variant
     For Each SelectedButton In SelectButtons
         If SelectedButton.Value Then
-            Debug.Print SelectedButton.Caption
+            ' Debug.Print SelectedButton.Caption
             ReCalculateSize (SelectedButton.Caption)
         End If
     Next SelectedButton
@@ -340,11 +340,15 @@ Private Function EX_DataValidation()
     ' Check if any validation fails, early return
     Dim i As Integer
     For i = 1 To 18
-        If Not IsEmpty(ValidateResults(i)) And Not ValidateResults(i) Then
+        Dim ValidateResultMsg As String
+        ValidateResultMsg = ValidateResults(i)
+        If Not IsStringEmpty(ValidateResultMsg) Then
+            MsgBox ValidateResultMsg, vbExclamation, "Input Error"
             EX_DataValidation = False
             Exit Function
         End If
     Next i
+    
 
     EX_DataValidation = True
 End Function

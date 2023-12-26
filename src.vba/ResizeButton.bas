@@ -4,7 +4,11 @@ Sub Resize()
         Exit Sub
     End If
     
+    Application.EnableEvents = False
+    
     ReCalculateSize
+    
+    Application.EnableEvents = True
 End Sub
 Sub ReCalculateSize(Optional ItemNameToChange As String)
     ' # Getting the sizing information

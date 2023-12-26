@@ -1,14 +1,11 @@
 Sub Importing()
-    Dim ws As Worksheet
-    Set ws = ActiveWorkbook.Sheets("Importing")
     
-    Dim EndNum As Integer
-    EndNum = ws.Cells(ws.Rows.Count, "B").End(xlUp).Row
     
-    MsgBox (EndNum)
-
     ' loop over the used rows in this sheet
-    For ii = 2 To EndNum
+    For ii = 2 To ThisWorkbook.Sheets("Importing").UsedRange.Rows.count
+    
+        Dim ws As Worksheet
+        Set ws = ActiveWorkbook.Sheets("Importing")
         
         ' Map all the variables needed to a cell in the row
         Dim FirstName As String
@@ -23,6 +20,7 @@ Sub Importing()
         Dim Height As String
         Dim FootL As String
         Dim FootW As String
+        Dim Hand As String
         Dim Gender As Boolean
         
         FirstName = ws.Cells(ii, 3)
@@ -38,6 +36,7 @@ Sub Importing()
         Height = ws.Cells(ii, 10)
         FootL = ws.Cells(ii, 11)
         FootW = ws.Cells(ii, 12)
+        Hand = ws.Cells(ii, 13)
         
         ' Then do the exact same stuff as the NC form
         ' # Generate a ID for the new cadet and a sheet
@@ -53,8 +52,8 @@ Sub Importing()
         Sheets(sNewSheetName).Range("B2").Value = Rank
         Sheets(sNewSheetName).Range("C2").Value = LastName
         Sheets(sNewSheetName).Range("E2").Value = FirstName
+        Sheets(sNewSheetName).Range("B4").Value = "9999999999"
         Sheets(sNewSheetName).Range("E4").Value = Email
-        
         ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
         Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
         
@@ -72,7 +71,7 @@ Sub Importing()
         Sheets(sNewSheetName).Range("L7").Value = Height
         Sheets(sNewSheetName).Range("L8").Value = FootL
         Sheets(sNewSheetName).Range("L9").Value = FootW
-        Sheets(sNewSheetName).Range("L10").Value = 9
+        Sheets(sNewSheetName).Range("L10").Value = Hand
         
         ' # Getting the sizing information
         Dim MeasuredSizes As Collection
@@ -85,7 +84,7 @@ Sub Importing()
         MeasuredSizes.Add Height, "height"
         MeasuredSizes.Add FootL, "FootL"
         MeasuredSizes.Add FootW, "FootW"
-        MeasuredSizes.Add 9, "hand"
+        MeasuredSizes.Add Hand, "hand"
         MeasuredSizes.Add Not Gender, "IsMale"
         
         For i = 6 To 24
@@ -112,7 +111,7 @@ Sub Importing()
         
         ' Find the next empty row in column B of the "Menu" worksheet
         Dim empty_row As Long
-        empty_row = ws.Cells(ws.Rows.Count, 2).End(xlUp).Row + 1
+        empty_row = ws.Cells(ws.Rows.count, 2).End(xlUp).Row + 1
         
         ' Write the value from NC_FirstNameInput to the found empty row
         ' but using the self defined vars here
