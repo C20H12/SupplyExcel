@@ -1,4 +1,4 @@
-Private Sub Workbook_BeforeClose(Cancel As Boolean)
+Sub ManualBackup()
     Dim currentDate As String
     Dim fileName As String
     Dim desktopPath As String
@@ -6,7 +6,7 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
     Dim savePath As String
     
     ' Get the current date in the "mm-dd-yyyy" format
-    currentDate = Format(Date, "mm-dd-yyyy")
+    currentDate = Format(Now, "mm-dd-yyyy_hh_nn_ss_am/pm")
     
     ' Get the current workbook's name
     fileName = ThisWorkbook.Name
@@ -15,7 +15,7 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
     fileName = Replace(fileName, " ", "_")
     
     ' Combine the date, workbook name, and file extension
-    fileName = currentDate & "-" & fileName & ".xlsm" ' Add the file extension
+    fileName = currentDate & "Manual-" & fileName & ".xlsm" ' Add the file extension
     
     ' Get the user's desktop path
     desktopPath = GetDesktopPath
@@ -29,13 +29,11 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
     
     ' Define the full save path
     savePath = supplyFolderPath & fileName
-    
+
     ' Save a copy of the workbook with the constructed file name
-    ThisWorkbook.SaveCopyAs savePath
+   ThisWorkbook.SaveCopyAs savePath
     
     ' Close the newly saved copy without saving changes to the original workbook
-    'Workbooks.Open savePath
-    'ActiveWorkbook.Close SaveChanges:=False
 End Sub
 
 Function GetDesktopPath() As String

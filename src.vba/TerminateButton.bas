@@ -1,3 +1,35 @@
+Sub MarkAsSOS()
+
+    Dim ws As Worksheet
+    Dim currentID As Variant
+    Dim menuSheet As Worksheet
+    Dim menuTable As ListObject
+    Dim idColumn As ListColumn
+    Dim deleteCell As Range
+    
+    ' Get reference to the current sheet
+    Set ws = ActiveSheet
+    
+    If ws.Name = "Template" Then
+        MsgBox "Cannot mark the template as SOS"
+        Exit Sub
+    Else
+        If MsgBox("Are you sure you want to perform this action?", vbYesNo) = vbNo Then
+            Exit Sub
+        End If
+    End If
+    
+    ws.Range("G27:G28").Merge
+    ws.Range("G27").Value = "S.O.S"
+    
+    With ws.Range("G27")
+        .Font.Size = 25
+        .Font.Bold = True
+        .VerticalAlignment = xlCenter
+        .HorizontalAlignment = xlCenter
+    End With
+End Sub
+
 
 Sub Terminate()
 
