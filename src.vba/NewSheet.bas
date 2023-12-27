@@ -6,7 +6,7 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
 
 '
     Sheets("Template").Select
-    Range("A1:L36").Select
+    Range("A1:L38").Select
     Selection.Copy
     Sheets.Add.Name = sNewSheetName
     Sheets(sNewSheetName).Select
@@ -27,5 +27,10 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
     Range("J5").Select
     Columns("E:E").ColumnWidth = 15
     Range("J5").Select
-   
+    
+    Set Rng = ActiveSheet.Range("A37:D38")
+    Set tbl = ActiveSheet.ListObjects.Add(xlSrcRange, Rng, , xlYes)
+    tbl.Name = sNewSheetName + "ExchangeTable"
+    tbl.TableStyle = "ExchangeTableStyle"
+    
 End Sub
