@@ -1,9 +1,59 @@
+Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
+    ' open the inventory book for modifying
+    Dim wb As Workbook
+    Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
+
+    ' find the right nsn inside the inventory sheet and store it here
+    Dim Loc As Range
+    
+    For Each sh In wb.Worksheets
+        With sh.UsedRange
+            Set Loc = .Cells.Find(What:=nsn)
+            If Not Loc Is Nothing Then
+                Exit For
+            End If
+        End With
+        Set Loc = Nothing
+    Next
+    
+    If Loc Is Nothing Then
+        FindInInventory = -999
+        If closeAfter Then
+            wb.Close
+        End If
+        Exit Function
+    End If
+    
+
+    Dim Row As Integer
+    Dim Col As Integer
+
+    Row = Loc.Row
+    Col = Loc.Column
+    
+    Dim QTYcol As Integer
+    
+    For i = Col To Col + 8
+        'Debug.Print Loc.Worksheet.Cells(3, i).Value
+        If Loc.Worksheet.Cells(3, i).Value = "QTY" Then
+            'Debug.Print Loc.Worksheet.Cells(Row, i).Value
+            QTYcol = i
+            Exit For
+        End If
+    Next i
+    
+    FindInInventory = CInt(Loc.Worksheet.Cells(Row, QTYcol).Value)
+    
+    If closeAfter Then
+        wb.Close
+    End If
+End Function
 Sub InventoryInteract()
     ' get the selected nsn
-    Dim NSN As String
-    NSN = ActiveCell.Value
+    Dim nsn As String
+    nsn = ActiveCell.Value
     
-    If Not NSN Like "####*-##-###-####" Then
+    If Not nsn Like "####*-##-###-####" Then
         MsgBox "Selected value is not a NSN"
         Exit Sub
     End If
@@ -11,14 +61,14 @@ Sub InventoryInteract()
     
     ' open the inventory book for modifying
     Dim wb As Workbook
-    Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsx")
+    Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
 
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
     
     For Each sh In wb.Worksheets
         With sh.UsedRange
-            Set Loc = .Cells.Find(What:=NSN)
+            Set Loc = .Cells.Find(What:=nsn)
             If Not Loc Is Nothing Then
                 Exit For
             End If
@@ -28,6 +78,7 @@ Sub InventoryInteract()
     
     If Loc Is Nothing Then
         MsgBox "Selected value not found."
+        wb.Close
         Exit Sub
     End If
     
@@ -55,4 +106,6 @@ Sub InventoryInteract()
     If Not Modified Then
         Loc.Worksheet.Cells(Row, QTYcol).Value = Modified
     End If
+    
+    wb.Close
 End Sub

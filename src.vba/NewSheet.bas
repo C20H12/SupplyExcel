@@ -3,7 +3,6 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
 ' Test_1 Macro
 '
 ' This is for creating a new Sheets File'
-
 '
     Sheets("Template").Select
     Range("A1:L38").Select

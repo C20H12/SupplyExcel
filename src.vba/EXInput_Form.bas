@@ -82,7 +82,7 @@ Private Sub EX_SubmitButton_Click()
     Next i
     
     ' loop through the buttons, only resize the selected ones
-    Dim SelectButtons(1 To 16) As MSForms.ToggleButton
+    Dim SelectButtons(1 To 17) As MSForms.ToggleButton
     Set SelectButtons(1) = EX_GlovesToggle
     Set SelectButtons(2) = EX_LeatherBootsToggle
     Set SelectButtons(3) = EX_FTUTunicToggle
@@ -98,7 +98,8 @@ Private Sub EX_SubmitButton_Click()
     Set SelectButtons(13) = EX_BeretToggle
     Set SelectButtons(14) = EX_TillyToggle
     Set SelectButtons(15) = EX_BeltToggle
-    Set SelectButtons(16) = EX_ParkaToggle
+    Set SelectButtons(16) = EX_TieToggle
+    Set SelectButtons(17) = EX_ParkaToggle
     
     Dim SelectedButton As Variant
     For Each SelectedButton In SelectButtons

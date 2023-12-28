@@ -5,7 +5,7 @@ Sub CopyWorksheetsFromExternalWorkbook()
     Dim ws As Worksheet
     
     ' Set the path to the source workbook
-    sourceFilePath = "C:\Users\david\OneDrive\Desktop\Supply_2.0_v_0.1.1.0.xlsm"
+    sourceFilePath = Application.GetOpenFilename(FileFilter:="Excel files, *.xls*", Title:="Choose an Excel file to open", MultiSelect:=False)
     
     ' Open the source workbook
     Set sourceWorkbook = Workbooks.Open(sourceFilePath)

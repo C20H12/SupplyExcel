@@ -23,7 +23,7 @@ Sub MarkAsSOS()
     ws.Range("G27").Value = "S.O.S"
     
     With ws.Range("G27")
-        .Font.Size = 25
+        .Font.size = 25
         .Font.Bold = True
         .VerticalAlignment = xlCenter
         .HorizontalAlignment = xlCenter

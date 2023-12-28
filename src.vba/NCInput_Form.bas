@@ -1,16 +1,4 @@
 
-Private Sub Label6_Click()
-
-End Sub
-
-Private Sub NC_EmailInput_Change()
-
-End Sub
-
-Private Sub NC_EmailLabel_Click()
-
-End Sub
-
 Private Sub UserForm_Initialize()
 '
 ' Initialize frm
@@ -42,9 +30,9 @@ Sub NC_SubmitButton_Click()
     ValidateResults(2) = ValidateText(NC_SurnameInput)
     ValidateResults(3) = ValidateText(NC_RankInput)
 
-    ' Validate NC_TelephoneInput, empty string bc we need no more telephone numbers
-    ValidateResults(4) = ""
-    ValidateResults(5) = ""
+    ' Validate NC_TelephoneInput
+    ValidateResults(4) = ValidateNumber(NC_TelephoneInput)
+    ValidateResults(5) = ValidateCustom(NC_TelephoneInput, Len(NC_TelephoneInput.Value) <> 10, "Telephone Number must be 10 digits.")
     
     ' Validate each size input to check if input is a number
     ValidateResults(6) = ValidateNumber(NC_HeadInput)
@@ -61,7 +49,7 @@ Sub NC_SubmitButton_Click()
     If NC_EnableValidate Then
         ValidateResults(15) = ValidateRange(NC_HeadInput, 19, 24.6)
         ValidateResults(16) = ValidateRange(NC_NeckInput, 12.5, 20)
-        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 53)
+        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 64)
         ValidateResults(18) = ValidateRange(NC_WaistInput, 30, 63)
         ValidateResults(19) = ValidateRange(NC_HipsInput, 30, 68)
         ValidateResults(20) = ValidateRange(NC_HeightInput, 55, 76)
@@ -93,31 +81,33 @@ Sub NC_SubmitButton_Click()
 
     CreateNewCadetSheet (sNewSheetName)
   
+    Dim CreatedSheet As Worksheet
+    Set CreatedSheet = Sheets(sNewSheetName)
         
     ' # Insert the values into the created sheet
-    Sheets(sNewSheetName).Range("B2").Value = NC_RankInput.Value
-    Sheets(sNewSheetName).Range("C2").Value = NC_SurnameInput.Value
-    Sheets(sNewSheetName).Range("E2").Value = NC_FirstNameInput.Value
-    Sheets(sNewSheetName).Range("B4").Value = NC_TelephoneInput.Value
-    Sheets(sNewSheetName).Range("E4").Value = NC_EmailInput.Value
+    CreatedSheet.Range("B2").Value = NC_RankInput.Value
+    CreatedSheet.Range("C2").Value = NC_SurnameInput.Value
+    CreatedSheet.Range("E2").Value = NC_FirstNameInput.Value
+    CreatedSheet.Range("B4").Value = NC_TelephoneInput.Value
+    CreatedSheet.Range("E4").Value = NC_EmailInput.Value
     ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
-    Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
+    CreatedSheet.Range("G2").Value = sNewCadetID
     
     If NC_FemaleInput = True Then
-        Sheets(sNewSheetName).Range("G4").Value = "Female"
+        CreatedSheet.Range("G4").Value = "Female"
     Else
-        Sheets(sNewSheetName).Range("G4").Value = "Male"
+        CreatedSheet.Range("G4").Value = "Male"
     End If
     
-    Sheets(sNewSheetName).Range("L2").Value = NC_HeadInput.Value
-    Sheets(sNewSheetName).Range("L3").Value = NC_NeckInput.Value
-    Sheets(sNewSheetName).Range("L4").Value = NC_ChestInput.Value
-    Sheets(sNewSheetName).Range("L5").Value = NC_WaistInput.Value
-    Sheets(sNewSheetName).Range("L6").Value = NC_HipsInput.Value
-    Sheets(sNewSheetName).Range("L7").Value = NC_HeightInput.Value
-    Sheets(sNewSheetName).Range("L8").Value = NC_FootLInput.Value
-    Sheets(sNewSheetName).Range("L9").Value = NC_FootWInput.Value
-    Sheets(sNewSheetName).Range("L10").Value = NC_HandLInput.Value
+    CreatedSheet.Range("L2").Value = NC_HeadInput.Value
+    CreatedSheet.Range("L3").Value = NC_NeckInput.Value
+    CreatedSheet.Range("L4").Value = NC_ChestInput.Value
+    CreatedSheet.Range("L5").Value = NC_WaistInput.Value
+    CreatedSheet.Range("L6").Value = NC_HipsInput.Value
+    CreatedSheet.Range("L7").Value = NC_HeightInput.Value
+    CreatedSheet.Range("L8").Value = NC_FootLInput.Value
+    CreatedSheet.Range("L9").Value = NC_FootWInput.Value
+    CreatedSheet.Range("L10").Value = NC_HandLInput.Value
     
     ' # Getting the sizing information
     Dim MeasuredSizes As Collection
@@ -135,7 +125,7 @@ Sub NC_SubmitButton_Click()
     
     For i = 6 To 24
         Dim SizeName As String
-        SizeName = Sheets(sNewSheetName).Range("B" & i).Value
+        SizeName = CreatedSheet.Range("B" & i).Value
                 
         If Not IsStringEmpty(SizeName) Then
             Dim ReturnedSize As String
@@ -146,11 +136,17 @@ Sub NC_SubmitButton_Click()
                ' Debug.Print ReturnedSize
                ' Debug.Print ReturnedSize, SplittedSize(0)
     
-                Sheets(sNewSheetName).Range("E" & i).Value = SplittedSize(0)
-                Sheets(sNewSheetName).Range("A" & i).Value = SplittedSize(1)
+                CreatedSheet.Range("E" & i).Value = SplittedSize(0)
+                CreatedSheet.Range("A" & i).Value = SplittedSize(1)
+                
+                If FindInInventory(SplittedSize(1)) > 0 Then
+                    CreatedSheet.Range("G" & i).Value = "In Stock"
+                End If
             End If
         End If
     Next i
+    ' close the inventory
+    ActiveWorkbook.Close
     
     ' # Insert an entry to the menu that holds all sheets
     Dim ws As Worksheet

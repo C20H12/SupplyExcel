@@ -2822,7 +2822,7 @@ Private Function p_GetSize(LevelData As Collection, Level As Integer, SizeProps 
 
 End Function
 
-Function GetNSNFromSize(ItemType As String, Size As String, IsMale As Boolean) As String
+Function GetNSNFromSize(ItemType As String, size As String, IsMale As Boolean) As String
     Dim SizingData As Collection
     Dim Data As Collection
     Dim TargetSize As String
@@ -2875,7 +2875,7 @@ Function GetNSNFromSize(ItemType As String, Size As String, IsMale As Boolean) A
     End If
     
     Set Data = SizingData.item("data")
-    TargetSize = Size
+    TargetSize = size
     GetNSNFromSize = p_GetNSNFromSize(Data, TargetSize)
 End Function
 
@@ -2883,7 +2883,7 @@ Function p_GetNSNFromSize(LevelData As Collection, TargetSize As String) As Stri
     Dim Key As Variant
     Dim StrKey As String
     Dim SizeAndNSN() As String
-    Dim NSN As String
+    Dim nsn As String
     Dim NSNResult As String
     
     For Each Key In LevelData.item("Keys")
@@ -2891,11 +2891,11 @@ Function p_GetNSNFromSize(LevelData As Collection, TargetSize As String) As Stri
         'Debug.Print StrKey
         ' If the value is a collection, recursively search the next level
         If TypeOf LevelData.item(StrKey) Is Collection Then
-            NSN = p_GetNSNFromSize(LevelData.item(StrKey), TargetSize)
+            nsn = p_GetNSNFromSize(LevelData.item(StrKey), TargetSize)
             
             ' If a NSN was found, return it
-            If Not IsStringEmpty(NSN) Then
-                p_GetNSNFromSize = NSN
+            If Not IsStringEmpty(nsn) Then
+                p_GetNSNFromSize = nsn
                 Exit Function
             End If
         Else
