@@ -1,4 +1,16 @@
 
+Private Sub Label6_Click()
+
+End Sub
+
+Private Sub NC_EmailInput_Change()
+
+End Sub
+
+Private Sub NC_EmailLabel_Click()
+
+End Sub
+
 Private Sub UserForm_Initialize()
 '
 ' Initialize frm
@@ -30,9 +42,9 @@ Sub NC_SubmitButton_Click()
     ValidateResults(2) = ValidateText(NC_SurnameInput)
     ValidateResults(3) = ValidateText(NC_RankInput)
 
-    ' Validate NC_TelephoneInput
-    ValidateResults(4) = ValidateNumber(NC_TelephoneInput)
-    ValidateResults(5) = ValidateCustom(NC_TelephoneInput, Len(NC_TelephoneInput.Value) <> 10, "Telephone Number must be 10 digits.")
+    ' Validate NC_TelephoneInput, empty string bc we need no more telephone numbers
+    ValidateResults(4) = ""
+    ValidateResults(5) = ""
     
     ' Validate each size input to check if input is a number
     ValidateResults(6) = ValidateNumber(NC_HeadInput)
@@ -49,7 +61,7 @@ Sub NC_SubmitButton_Click()
     If NC_EnableValidate Then
         ValidateResults(15) = ValidateRange(NC_HeadInput, 19, 24.6)
         ValidateResults(16) = ValidateRange(NC_NeckInput, 12.5, 20)
-        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 64)
+        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 53)
         ValidateResults(18) = ValidateRange(NC_WaistInput, 30, 63)
         ValidateResults(19) = ValidateRange(NC_HipsInput, 30, 68)
         ValidateResults(20) = ValidateRange(NC_HeightInput, 55, 76)

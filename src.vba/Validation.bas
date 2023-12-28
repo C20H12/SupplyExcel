@@ -1,5 +1,5 @@
 Function ValidateText(InputBox As MSForms.TextBox) As String
-    If Not IsLettersOrUnderscores(InputBox.Value) Then
+    If IsStringEmpty(InputBox.Value) Or Not IsLettersOrUnderscores(InputBox.Value) Then
         ValidateText = "Please enter letters or letters with spaces for " & InputBox.Tag
     Else
         ValidateText = ""
