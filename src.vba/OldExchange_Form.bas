@@ -225,8 +225,8 @@ Private Sub EX_SubmitButton_Click()
     
     Dim nws As Worksheet
     Set nws = ActiveWorkbook.Worksheets(sNewSheetName)
-    Dim extbl As ListObject
-    Set extbl = nws.ListObjects(sNewSheetName & "ExchangeTable")
+    Dim Extbl As ListObject
+    Set Extbl = nws.ListObjects(sNewSheetName & "ExchangeTable")
 
     Dim SelectedButton As Variant
     Dim SelectedItems() As String
@@ -251,7 +251,7 @@ Private Sub EX_SubmitButton_Click()
         Else
             ' Add a new row to the ExchangeTable
             Dim NewRow As ListRow
-            Set NewRow = extbl.ListRows.Add
+            Set NewRow = Extbl.ListRows.Add
             NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
             NewRow.Range.Cells(1, 2) = nws.Range("B" & CStr(i)).Value
             NewRow.Range.Cells(1, 3) = InputBox("Previous " & nws.Range("B" & CStr(i)).Value & " Size", "Exchange Data")
