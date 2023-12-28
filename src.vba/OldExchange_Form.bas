@@ -9,6 +9,7 @@ Dim HeightCount As Integer
 Dim FootLCount As Integer
 Dim FootWCount As Integer
 Dim HandCount As Integer
+Dim i As Integer
 
 Private Sub UserForm_Initialize()
 '
@@ -64,11 +65,23 @@ Private Sub EX_SubmitButton_Click()
         Exit Sub
     End If
     
-    Dim ValidateResults(1 To 23) As String
+    Dim ValidateResults(1 To 3) As String
     ' Validate EX_FirstNameInput, EX_SurnameInput, EX_RankInput
     ValidateResults(1) = ValidateText(EX_FirstNameInput)
     ValidateResults(2) = ValidateText(EX_SurnameInput)
     ValidateResults(3) = ValidateText(EX_RankInput)
+    
+    For i = 1 To 3
+        Dim ValidateResultMsg As String
+        ValidateResultMsg = ValidateResults(i)
+        If Not IsStringEmpty(ValidateResultMsg) Then
+            MsgBox ValidateResultMsg, vbExclamation, "Input Error"
+            Exit Sub
+        End If
+    Next i
+
+
+
 
     ' do validation on each
     Dim bPassed As Boolean
@@ -111,7 +124,7 @@ Private Sub EX_SubmitButton_Click()
     sNewCadetID = GetUUID()
     Dim sNewSheetName As String
     sNewSheetName = left(EX_FirstNameInput.Value & "_" & EX_SurnameInput.Value, 20) & "_" & sNewCadetID
-    MsgBox (sNewSheetName)
+
     
     CreateNewCadetSheet (sNewSheetName)
     
@@ -142,18 +155,17 @@ Private Sub EX_SubmitButton_Click()
     ' # Getting the sizing information
     Dim MeasuredSizes As Collection
     Set MeasuredSizes = New Collection
-    MeasuredSizes.Add EX_HeadInput.Value, "head"
-    MeasuredSizes.Add EX_NeckInput.Value, "neck"
-    MeasuredSizes.Add EX_ChestInput.Value, "chest"
-    MeasuredSizes.Add EX_WaistInput.Value, "waist"
-    MeasuredSizes.Add EX_HipsInput.Value, "hips"
-    MeasuredSizes.Add EX_HeightInput.Value, "height"
-    MeasuredSizes.Add EX_FootLInput.Value, "FootL"
-    MeasuredSizes.Add EX_FootWInput.Value, "FootW"
-    MeasuredSizes.Add EX_HandLInput.Value, "hand"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_HeadInput.Value), 0, EX_HeadInput.Value), "head"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_NeckInput.Value), 0, EX_NeckInput.Value), "neck"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_ChestInput.Value), 0, EX_ChestInput.Value), "chest"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_WaistInput.Value), 0, EX_WaistInput.Value), "waist"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_HipsInput.Value), 0, EX_HipsInput.Value), "hips"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_HeightInput.Value), 0, EX_HeightInput.Value), "height"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_FootLInput.Value), 0, EX_FootLInput.Value), "FootL"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_FootWInput.Value), 0, EX_FootWInput.Value), "FootW"
+    MeasuredSizes.Add IIf(IsStringEmpty(EX_HandLInput.Value), 0, EX_HandLInput.Value), "hand"
     MeasuredSizes.Add Not EX_FemaleInput, "IsMale"
     
-    Dim i As Integer
     For i = 6 To 24
         Dim SizeName As String
         SizeName = Sheets(sNewSheetName).Range("B" & i).Value
@@ -228,10 +240,7 @@ Private Sub EX_SubmitButton_Click()
         End If
     Next SelectedButton
     
-    For i = 1 To numexch
-        MsgBox (SelectedItems(i))
-    Next i
-    
+  
     For i = 6 To 26
         If Not IsInArray(nws.Range("B" & CStr(i)).Value, SelectedItems()) Then
             ' Clear the value in column E for the current row
@@ -253,7 +262,8 @@ Private Sub EX_SubmitButton_Click()
     
     Application.EnableEvents = True
     
-  Unload Me
+    Unload Me
+
 End Sub
 
 ' # Toggle Buttons
