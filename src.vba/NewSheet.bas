@@ -31,6 +31,10 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
     Set tbl = ActiveSheet.ListObjects.Add(xlSrcRange, Rng, , xlYes)
     tbl.Name = sNewSheetName + "ExchangeTable"
     tbl.TableStyle = "ExchangeTableStyle"
+    With tbl.DataBodyRange
+        .HorizontalAlignment = xlCenter
+        .VerticalAlignment = xlCenter
+    End With
     tbl.ListRows(1).Delete
-
+    
 End Sub

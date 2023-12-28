@@ -102,10 +102,22 @@ Private Sub EX_SubmitButton_Click()
     Set SelectButtons(17) = EX_ParkaToggle
     
     Dim SelectedButton As Variant
+    Dim TableName As String
+    Dim NewRow As ListRow
+    Dim RowNum As String
+    Dim Extbl As ListObject
     For Each SelectedButton In SelectButtons
         If SelectedButton.Value Then
             ' Debug.Print SelectedButton.Caption
+            RowNum = FindRowNum(SelectedButton.Caption)
+        
+            Set Extbl = ActiveSheet.ListObjects(CStr(ActiveSheet.Name) & "ExchangeTable")
+            Set NewRow = Extbl.ListRows.Add
+            NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
+            NewRow.Range.Cells(1, 2) = SelectedButton.Caption
+            NewRow.Range.Cells(1, 3) = ActiveSheet.Range("E" & RowNum).Value
             ReCalculateSize (SelectedButton.Caption)
+            NewRow.Range.Cells(1, 4) = ActiveSheet.Range("E" & RowNum).Value
         End If
     Next SelectedButton
     
