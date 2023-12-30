@@ -1,7 +1,24 @@
+Sub SelectFileAndStorePath()
+    Dim selectedFile As Variant
+    
+    ' Open the file explorer and prompt the user to select a file
+    selectedFile = Application.GetOpenFilename("All Files (*.*), *.*", Title:="Select a File")
+    
+    ' Check if the user selected a file
+    If selectedFile <> "False" Then
+        ' Store the file path in cell A1 of the "Menu" sheet
+        Worksheets("Menu").Range("CW1").Value = selectedFile
+    Else
+        ' User canceled the file selection
+        MsgBox "File selection canceled."
+    End If
+End Sub
+
+
 Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
-    ' open the inventory book for modifying
     Dim wb As Workbook
-    Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
+    ' get object makes it not show up
+    Set wb = GetObject(Worksheets("Menu").Range("CW1").Value)
 
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
@@ -19,7 +36,7 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
     If Loc Is Nothing Then
         FindInInventory = -999
         If closeAfter Then
-            wb.Close
+            wb.Close savechanges:=False
         End If
         Exit Function
     End If
@@ -42,12 +59,27 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
         End If
     Next i
     
+    Debug.Print Loc.Worksheet.Cells(Row, QTYcol).Value
     FindInInventory = CInt(Loc.Worksheet.Cells(Row, QTYcol).Value)
     
     If closeAfter Then
-        wb.Close
+        wb.Close savechanges:=False
     End If
 End Function
+
+Sub UpdateInStockStatus()
+    For i = 6 To 24
+        Dim nsn As String
+        nsn = ActiveSheet.Range("A" & i).Value
+                
+        If Not IsStringEmpty(nsn) Then
+            If FindInInventory(nsn) > 0 Then
+                ActiveSheet.Range("G" & i).Value = "In Stock"
+            End If
+        End If
+    Next i
+End Sub
+
 Sub InventoryInteract()
     ' get the selected nsn
     Dim nsn As String
@@ -103,9 +135,9 @@ Sub InventoryInteract()
     Dim Modified As Variant
     Modified = Application.InputBox("Modify the quantity of this item:", "Inventory", Loc.Worksheet.Cells(Row, QTYcol).Value, Type:=1)
     
-    If Not Modified Then
+    If Not Modified = False Then
         Loc.Worksheet.Cells(Row, QTYcol).Value = Modified
     End If
     
-    wb.Close
+    wb.Close savechanges:=True
 End Sub

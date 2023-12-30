@@ -46,32 +46,24 @@ Sub ReCalculateSize(Optional ItemNameToChange As String)
                     If Not SplittedSize(0) = ActiveSheet.Range("E" & i).Text Then
                         ActiveSheet.Range("G" & i).Value = "UNP"
                     End If
-    
+                    
+                    Dim sNewSheetName As String
+                    sNewSheetName = ActiveSheet.Name
+                    Dim extbl As ListObject
+                    Set extbl = ActiveSheet.ListObjects(sNewSheetName & "ExchangeTable")
+                    Dim NewRow As ListRow
+                    Set NewRow = extbl.ListRows.Add
+                    NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
+                    NewRow.Range.Cells(1, 2) = ActiveSheet.Range("B" & CStr(i)).Value
+                    NewRow.Range.Cells(1, 3) = ActiveSheet.Range("E" & CStr(i)).Value
+                    NewRow.Range.Cells(1, 4) = SplittedSize(0)
+
+            
                     ActiveSheet.Range("E" & i).Value = SplittedSize(0)
                     ActiveSheet.Range("A" & i).Value = SplittedSize(1)
-                    
                 End If
             End If
         End If
     Next i
 End Sub
-
-Function FindRowNum(Optional ItemNameToChange As String)
- 
     
-    For i = 6 To 24
-        Dim ItemName As String
-        ItemName = ActiveSheet.Range("B" & i).Value
-        
-        ' only check non empty cells in the item names column
-        If Not IsStringEmpty(ItemName) Then
-            
-            ' if nothing is passed in, do sizing OR if an exact item name is passed in, it needs to match
-            If IsStringEmpty(ItemNameToChange) Or (Not IsStringEmpty(ItemNameToChange) And ItemNameToChange = ItemName) Then
-                
-                    FindRowNum = CStr(i)
-
-            End If
-        End If
-    Next i
-End Function

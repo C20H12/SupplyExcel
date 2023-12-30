@@ -22,23 +22,23 @@ Private Sub UserForm_Initialize()
     With OldExchange_Form
         ' Set the form size
         Height = 450
-        Width = 450
+        Width = 500
     End With
     
-    EX_TShirtToggle = True
-    EX_FirstNameInput = "john"
-    EX_SurnameInput = "ignoroff"
-    EX_RankInput = "AC"
-    EX_HeadInput.Value = GenerateRandomMeasurement(19, 26)
-    EX_NeckInput.Value = GenerateRandomMeasurement(12.5, 20)
-    EX_ChestInput.Value = GenerateRandomMeasurement(24, 64)
-    EX_WaistInput.Value = GenerateRandomMeasurement(30, 63)
-    EX_HipsInput.Value = GenerateRandomMeasurement(30, 68)
-    EX_HeightInput.Value = GenerateRandomMeasurement(55, 76)
-    EX_FootLInput.Value = GenerateRandomMeasurement(215, 330)
-    EX_FootWInput.Value = GenerateRandomMeasurement(85, 130)
-    EX_HandLInput.Value = GenerateRandomMeasurement(6, 10)
-    EX_FemaleInput.Value = GenerateRandomFemale()
+'    EX_TShirtToggle = True
+'    EX_FirstNameInput = "john"
+'    EX_SurnameInput = "ignoroff"
+'    EX_RankInput = "AC"
+'    EX_HeadInput.Value = GenerateRandomMeasurement(19, 26)
+'    EX_NeckInput.Value = GenerateRandomMeasurement(12.5, 20)
+'    EX_ChestInput.Value = GenerateRandomMeasurement(24, 64)
+'    EX_WaistInput.Value = GenerateRandomMeasurement(30, 63)
+'    EX_HipsInput.Value = GenerateRandomMeasurement(30, 68)
+'    EX_HeightInput.Value = GenerateRandomMeasurement(55, 76)
+'    EX_FootLInput.Value = GenerateRandomMeasurement(215, 330)
+'    EX_FootWInput.Value = GenerateRandomMeasurement(85, 130)
+'    EX_HandLInput.Value = GenerateRandomMeasurement(6, 10)
+'    EX_FemaleInput.Value = GenerateRandomFemale()
 End Sub
 
 ' # Form controls
@@ -225,8 +225,8 @@ Private Sub EX_SubmitButton_Click()
     
     Dim nws As Worksheet
     Set nws = ActiveWorkbook.Worksheets(sNewSheetName)
-    Dim Extbl As ListObject
-    Set Extbl = nws.ListObjects(sNewSheetName & "ExchangeTable")
+    Dim extbl As ListObject
+    Set extbl = nws.ListObjects(sNewSheetName & "ExchangeTable")
 
     Dim SelectedButton As Variant
     Dim SelectedItems() As String
@@ -251,7 +251,7 @@ Private Sub EX_SubmitButton_Click()
         Else
             ' Add a new row to the ExchangeTable
             Dim NewRow As ListRow
-            Set NewRow = Extbl.ListRows.Add
+            Set NewRow = extbl.ListRows.Add
             NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
             NewRow.Range.Cells(1, 2) = nws.Range("B" & CStr(i)).Value
             NewRow.Range.Cells(1, 3) = InputBox("Previous " & nws.Range("B" & CStr(i)).Value & " Size", "Exchange Data")

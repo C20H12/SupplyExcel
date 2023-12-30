@@ -6,3 +6,11 @@ Sub ExchangeButton()
 
 End Sub
 
+Sub OldCadetExchangeButton()
+
+    If Not OldExchange_Form.Visible Then
+        OldExchange_Form.Show
+    End If
+
+End Sub
+

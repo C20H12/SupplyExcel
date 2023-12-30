@@ -145,8 +145,6 @@ Sub NC_SubmitButton_Click()
             End If
         End If
     Next i
-    ' close the inventory
-    ActiveWorkbook.Close
     
     ' # Insert an entry to the menu that holds all sheets
     Dim ws As Worksheet
