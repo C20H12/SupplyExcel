@@ -1,7 +1,24 @@
+Sub SelectFileAndStorePath()
+    Dim selectedFile As Variant
+    
+    ' Open the file explorer and prompt the user to select a file
+    selectedFile = Application.GetOpenFilename("All Files (*.*), *.*", Title:="Select a File")
+    
+    ' Check if the user selected a file
+    If selectedFile <> "False" Then
+        ' Store the file path in cell A1 of the "Menu" sheet
+        Worksheets("Menu").Range("CW1").Value = selectedFile
+    Else
+        ' User canceled the file selection
+        MsgBox "File selection canceled."
+    End If
+End Sub
+
+
 Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
     Dim wb As Workbook
     ' get object makes it not show up
-    Set wb = GetObject(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
+    Set wb = GetObject(Worksheets("Menu").Range("CW1").Value)
 
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
@@ -42,6 +59,7 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
         End If
     Next i
     
+    Debug.Print Loc.Worksheet.Cells(Row, QTYcol).Value
     FindInInventory = CInt(Loc.Worksheet.Cells(Row, QTYcol).Value)
     
     If closeAfter Then
@@ -120,6 +138,6 @@ Sub InventoryInteract()
     If Not Modified = False Then
         Loc.Worksheet.Cells(Row, QTYcol).Value = Modified
     End If
-
+    
     wb.Close savechanges:=True
 End Sub

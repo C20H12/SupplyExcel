@@ -111,6 +111,8 @@ Private Sub EX_SubmitButton_Click()
         End If
     Next SelectedButton
     
+    
+    
     Application.EnableEvents = True
     
     Unload Me
