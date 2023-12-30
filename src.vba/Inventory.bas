@@ -1,7 +1,7 @@
 Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
-    ' open the inventory book for modifying
     Dim wb As Workbook
-    Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
+    ' get object makes it not show up
+    Set wb = GetObject(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
 
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
@@ -19,7 +19,7 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
     If Loc Is Nothing Then
         FindInInventory = -999
         If closeAfter Then
-            wb.Close
+            wb.Close savechanges:=False
         End If
         Exit Function
     End If
@@ -45,9 +45,23 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
     FindInInventory = CInt(Loc.Worksheet.Cells(Row, QTYcol).Value)
     
     If closeAfter Then
-        wb.Close
+        wb.Close savechanges:=False
     End If
 End Function
+
+Sub UpdateInStockStatus()
+    For i = 6 To 24
+        Dim nsn As String
+        nsn = ActiveSheet.Range("A" & i).Value
+                
+        If Not IsStringEmpty(nsn) Then
+            If FindInInventory(nsn) > 0 Then
+                ActiveSheet.Range("G" & i).Value = "In Stock"
+            End If
+        End If
+    Next i
+End Sub
+
 Sub InventoryInteract()
     ' get the selected nsn
     Dim nsn As String
@@ -103,9 +117,9 @@ Sub InventoryInteract()
     Dim Modified As Variant
     Modified = Application.InputBox("Modify the quantity of this item:", "Inventory", Loc.Worksheet.Cells(Row, QTYcol).Value, Type:=1)
     
-    If Not Modified Then
+    If Not Modified = False Then
         Loc.Worksheet.Cells(Row, QTYcol).Value = Modified
     End If
-    
-    wb.Close
+
+    wb.Close savechanges:=True
 End Sub

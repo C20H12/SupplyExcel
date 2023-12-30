@@ -45,3 +45,46 @@ Function GetDesktopPath() As String
     
     Set WshShell = Nothing
 End Function
+
+Sub import()
+
+    Dim Loc As Range
+    
+    For Each sh In wb.Worksheets
+        With sh.UsedRange
+            Set Loc = .Cells.Find(What:=nsn)
+            If Not Loc Is Nothing Then
+                Exit For
+            End If
+        End With
+        Set Loc = Nothing
+    Next
+    
+    If Loc Is Nothing Then
+        FindInInventory = -999
+        If closeAfter Then
+            wb.Close
+        End If
+        Exit Function
+    End If
+    
+
+    Dim Row As Integer
+    Dim Col As Integer
+
+    Row = Loc.Row
+    Col = Loc.Column
+    
+    Dim QTYcol As Integer
+    
+    For i = Col To Col + 8
+        If Loc.Worksheet.Cells(3, i).Value = "QTY" Then
+            QTYcol = i
+            Exit For
+        End If
+    Next i
+    
+    Loc.Worksheet.Cells(Row, QTYcol).Value 1
+    
+    
+End Sub

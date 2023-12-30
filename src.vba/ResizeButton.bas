@@ -49,29 +49,8 @@ Sub ReCalculateSize(Optional ItemNameToChange As String)
     
                     ActiveSheet.Range("E" & i).Value = SplittedSize(0)
                     ActiveSheet.Range("A" & i).Value = SplittedSize(1)
-                    
                 End If
             End If
         End If
     Next i
 End Sub
-
-Function FindRowNum(Optional ItemNameToChange As String)
- 
-    
-    For i = 6 To 24
-        Dim ItemName As String
-        ItemName = ActiveSheet.Range("B" & i).Value
-        
-        ' only check non empty cells in the item names column
-        If Not IsStringEmpty(ItemName) Then
-            
-            ' if nothing is passed in, do sizing OR if an exact item name is passed in, it needs to match
-            If IsStringEmpty(ItemNameToChange) Or (Not IsStringEmpty(ItemNameToChange) And ItemNameToChange = ItemName) Then
-                
-                    FindRowNum = CStr(i)
-
-            End If
-        End If
-    Next i
-End Function

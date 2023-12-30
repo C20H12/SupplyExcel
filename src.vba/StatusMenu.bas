@@ -8,7 +8,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     Dim foundStatus As String ' Move the foundStatus variable declaration outside the loop
     
     ' Define the search strings in the new order of priority
-    SearchStrings = Array("S.O.S", "UNP", "Pick Up", "In Stock", "Ready To Order", "Ordered", "Complete", "Returned")
+    SearchStrings = Array("S.O.S", "UNP", "In Stock", "Pick Up", "Ready To Order", "Ordered", "Complete", "Returned")
     
     ' Define the names of sheets to exclude from the search
     excludedSheetNames = Array("Menu", "Userform", "Template", "Pickup")
@@ -58,24 +58,20 @@ Sub ScanAllSheetsAndPrioritizeLabels()
                 End If
             Next SearchString
             
-            ' If "Ordered," "Ready To Order," or "Pick Up" statuses are found,
-            ' update the Menu sheet with the concatenated statuses
-            If foundStatus <> "" And (InStr(foundStatus, "Ordered") <> 0 Or InStr(foundStatus, "Ready To Order") <> 0 Or InStr(foundStatus, "Pick Up") <> 0) Then
-                Dim menuCell As Range
-                Set menuCell = wsMenu.Columns("E").Find(What:=barcode, LookIn:=xlValues, LookAt:=xlWhole)
-                If Not menuCell Is Nothing Then
-                    wsMenu.Cells(menuCell.Row, "C").Value = foundStatus
-                    ' Set the pickupFound flag to True
-                    pickupFound = True
-                End If
-            ElseIf foundStatus <> "" Then
-                ' If other statuses are found (UNP, Complete, or Returned),
+            
+            If foundStatus <> "" Then
                 ' prioritize and update the Menu sheet with the first found status
                 Set menuCell = wsMenu.Columns("E").Find(What:=barcode, LookIn:=xlValues, LookAt:=xlWhole)
                 If Not menuCell Is Nothing Then
-                    wsMenu.Cells(menuCell.Row, "C").Value = Split(foundStatus, ", ")(0) ' Prioritize the first status
-                    ' Set the pickupFound flag to True
-                    pickupFound = True
+                    If InStr(foundStatus, "S.O.S") Then
+                        wsMenu.Cells(menuCell.Row, "C").Value = "S.O.S"
+                        ' Set the pickupFound flag to True
+                        pickupFound = True
+                    Else
+                        wsMenu.Cells(menuCell.Row, "C").Value = foundStatus
+                        ' Set the pickupFound flag to True
+                        pickupFound = True
+                    End If
                 End If
             End If
         End If

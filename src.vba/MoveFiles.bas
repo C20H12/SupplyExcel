@@ -23,5 +23,5 @@ Sub CopyWorksheetsFromExternalWorkbook()
     Next ws
     
     ' Close the source workbook without saving changes
-    sourceWorkbook.Close SaveChanges:=False
+    sourceWorkbook.Close savechanges:=False
 End Sub
