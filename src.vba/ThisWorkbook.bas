@@ -1,5 +1,5 @@
 Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
-    If sh.Name = "Importing" Or sh.Name = "Pickup" Or sh.Name = "Menu" Or sh.Name = "Template" Then
+    If isSpecialSheet(sh.Name) Then
         Exit Sub
     End If
     

@@ -94,3 +94,9 @@ Function ArrayToString(ByRef arr() As Variant) As String
     Next i
     ArrayToString = out
 End Function
+
+Function isSpecialSheet(SheetName As String)
+
+    isSpecialSheet = (SheetName = "Menu" Or SheetName = "Importing" Or SheetName = "Pickup" Or SheetName = "Template" Or SheetName = "Master")
+
+End Function

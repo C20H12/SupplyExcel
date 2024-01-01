@@ -48,43 +48,49 @@ End Function
 
 Sub import()
 
-    Dim Loc As Range
+    For ii = 2 To ThisWorkbook.Sheets("Importing").UsedRange.Rows.Count
     
-    For Each sh In wb.Worksheets
-        With sh.UsedRange
-            Set Loc = .Cells.Find(What:=nsn)
-            If Not Loc Is Nothing Then
+        Dim nsn As String
+        nsn = ActiveSheet.Cells(ii, 1).Value
+        Dim addAmount As Integer
+        addAmount = CInt(ActiveSheet.Cells(ii, 2).Value)
+
+        Dim Loc As Range
+        
+        For Each sh In ThisWorkbook.Sheets
+            If sh.Name <> "Inventory" And sh.Name <> "Importing" Then
+                With sh.UsedRange
+                    Set Loc = .Cells.Find(What:=nsn)
+                    If Not Loc Is Nothing Then
+                        Exit For
+                    End If
+                End With
+                Set Loc = Nothing
+            End If
+        Next
+        
+        If Loc Is Nothing Then
+            Exit Sub
+        End If
+        
+        Dim Row As Integer
+        Dim Col As Integer
+    
+        Row = Loc.Row
+        Col = Loc.Column
+        
+        Dim QTYcol As Integer
+        
+        For i = Col To Col + 8
+            If Loc.Worksheet.Cells(3, i).Value = "QTY" Then
+                QTYcol = i
                 Exit For
             End If
-        End With
-        Set Loc = Nothing
-    Next
+        Next i
+        
+        MsgBox Loc.Worksheet.Cells(Row, QTYcol).Value
+        
+        Loc.Worksheet.Cells(Row, QTYcol).Value = Loc.Worksheet.Cells(Row, QTYcol).Value + addAmount
     
-    If Loc Is Nothing Then
-        FindInInventory = -999
-        If closeAfter Then
-            wb.Close
-        End If
-        Exit Function
-    End If
-    
-
-    Dim Row As Integer
-    Dim Col As Integer
-
-    Row = Loc.Row
-    Col = Loc.Column
-    
-    Dim QTYcol As Integer
-    
-    For i = Col To Col + 8
-        If Loc.Worksheet.Cells(3, i).Value = "QTY" Then
-            QTYcol = i
-            Exit For
-        End If
-    Next i
-    
-    Loc.Worksheet.Cells(Row, QTYcol).Value 1
-    
-    
+    Next ii
 End Sub

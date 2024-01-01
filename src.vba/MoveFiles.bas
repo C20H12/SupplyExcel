@@ -16,7 +16,7 @@ Sub CopyWorksheetsFromExternalWorkbook()
     ' Loop through each worksheet in the source workbook
     For Each ws In sourceWorkbook.Worksheets
         ' Check if the sheet name is not one of the excluded names
-        If ws.Name <> "Importing" And ws.Name <> "Menu" And ws.Name <> "Template" Then
+        If Not isSpecialSheet(ws.Name) Then
             ' Copy the sheet to the current workbook
             ws.Copy After:=currentWorkbook.Sheets(currentWorkbook.Sheets.count)
         End If

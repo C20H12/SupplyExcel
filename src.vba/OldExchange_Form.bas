@@ -247,7 +247,7 @@ Private Sub EX_SubmitButton_Click()
             ' Clear the value in column E for the current row
             nws.Range("E" & CStr(i)).Value = "---------"
             nws.Range("A" & CStr(i)).Value = ""
-            nws.Range("G" & CStr(i)).Value = "Completed"
+            nws.Range("G" & CStr(i)).Value = "Complete"
         Else
             ' Add a new row to the ExchangeTable
             Dim NewRow As ListRow

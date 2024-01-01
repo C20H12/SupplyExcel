@@ -18,7 +18,7 @@ End Sub
 Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
     Dim wb As Workbook
     ' get object makes it not show up
-    Set wb = GetObject(Worksheets("Menu").Range("CW1").Value)
+    Set wb = GetObject(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
 
     ' find the right nsn inside the inventory sheet and store it here
     Dim Loc As Range
@@ -59,7 +59,6 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
         End If
     Next i
     
-    Debug.Print Loc.Worksheet.Cells(Row, QTYcol).Value
     FindInInventory = CInt(Loc.Worksheet.Cells(Row, QTYcol).Value)
     
     If closeAfter Then

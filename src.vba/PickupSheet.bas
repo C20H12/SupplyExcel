@@ -7,10 +7,17 @@ Sub pickup()
     
     Dim PickUpSheetRow As Integer
     PickUpSheetRow = 1
+    
+    ' remove all buttons so that there is no overlap
+    For Each btn In origSheet.Buttons
+        If btn.Caption <> "Generate" Then
+            btn.Delete
+        End If
+    Next btn
 
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
-        If ws.Name = "Menu" Or ws.Name = "Importing" Or ws.Name = "Pickup" Or ws.Name = "Template" Then
+        If isSpecialSheet(ws.Name) Then
             GoTo continue
         End If
         
@@ -44,7 +51,7 @@ Sub pickup()
 
         For i = 0 To 18
             If i = 9 Or i = 14 Or Len(Trim(sizes(i))) = 0 Or status(i) <> "Pick Up" Then
-                GoTo continueInner
+                GoTo continueinner
             End If
             
             ' fill in the size
@@ -53,7 +60,7 @@ Sub pickup()
             ' highlight if ready to pick up
             origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
             
-continueInner:
+continueinner:
         Next i
         
         Dim t As Range
@@ -64,7 +71,7 @@ continueInner:
         With btn
           .OnAction = "'markPickUpAsComplete " & SheetName & ", " & PickUpSheetRow & "'"
           .Caption = "Complete"
-          .Name = "Complete"
+          .Name = "Complete" & PickUpSheetRow
         End With
         
         PickUpSheetRow = PickUpSheetRow + 1
