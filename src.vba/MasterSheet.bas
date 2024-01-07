@@ -1,12 +1,17 @@
 Sub master()
-
+    Dim lastRow As Long
+    lastRow = ActiveSheet.UsedRange.Rows.count
+    For i = 3 To lastRow - 1
+        ThisWorkbook.Sheets("Master").Rows(3).Delete
+    Next i
+    
     Dim origSheet As Worksheet
     Set origSheet = ActiveSheet
     
     Dim ws As Worksheet
     
     Dim PickUpSheetRow As Integer
-    PickUpSheetRow = 1
+    PickUpSheetRow = 2
     
     ActiveWorkbook.Worksheets("Master").ListObjects("StatusTable").AutoFilter.ShowAllData
     
@@ -41,7 +46,14 @@ Sub master()
         
         ' get name
         origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
-        
+        Dim linkAddress As String
+        linkAddress = "" & ws.Name & "!A1"
+        origSheet.Hyperlinks.Add Anchor:=origSheet.Cells(PickUpSheetRow + 1, 1), _
+                          Address:="", _
+                          SubAddress:=linkAddress, _
+                          TextToDisplay:=ws.Range("C2").Value + ", " + ws.Range("E2").Value
+                      
+    
         Dim hasIncomplete As Boolean
         hasIncomplete = False
 
