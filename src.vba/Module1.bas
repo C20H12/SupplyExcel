@@ -47,11 +47,28 @@ Function GetDesktopPath() As String
 End Function
 
 Sub import()
+    ' stores size, name, old_amount, new amount
+    Dim changesCount As Integer
+    changesCount = 0
+    Dim changes() As Variant
+    Dim qtyCells() As Variant
+    Dim newqty() As Variant
 
     For ii = 2 To ThisWorkbook.Sheets("Importing").UsedRange.Rows.Count
+        
+        changesCount = changesCount + 1
+        ReDim Preserve changes(changesCount)
+        ReDim Preserve qtyCells(changesCount)
+        ReDim Preserve newqty(changesCount)
     
         Dim nsn As String
         nsn = ActiveSheet.Cells(ii, 1).Value
+        
+        ' if misinputted a space the used rows are more than it should be
+        If Len(Trim(nsn)) = 0 Then
+            Exit For
+        End If
+        
         Dim addAmount As Integer
         addAmount = CInt(ActiveSheet.Cells(ii, 2).Value)
 
@@ -61,6 +78,7 @@ Sub import()
             If sh.Name <> "Inventory" And sh.Name <> "Importing" Then
                 With sh.UsedRange
                     Set Loc = .Cells.Find(What:=nsn)
+                    ' is found
                     If Not Loc Is Nothing Then
                         Exit For
                     End If
@@ -70,7 +88,10 @@ Sub import()
         Next
         
         If Loc Is Nothing Then
-            Exit Sub
+            changes(changesCount) = "Invalid NSN"
+            GoTo continue
+        Else
+            changes(changesCount) = Loc.Offset(0, 1).Value & vbTab & Loc.Worksheet.Cells(1, Loc.Column) & vbTab
         End If
         
         Dim Row As Integer
@@ -88,9 +109,30 @@ Sub import()
             End If
         Next i
         
-        MsgBox Loc.Worksheet.Cells(Row, QTYcol).Value
+       ' MsgBox Loc.Worksheet.Cells(Row, QTYcol).Value
         
-        Loc.Worksheet.Cells(Row, QTYcol).Value = Loc.Worksheet.Cells(Row, QTYcol).Value + addAmount
-    
+        Dim oldamount As Integer
+        oldamount = Loc.Worksheet.Cells(Row, QTYcol).Value
+        changes(changesCount) = changes(changesCount) & "From " & oldamount & " to " & oldamount + addAmount
+        Set qtyCells(changesCount) = Loc.Worksheet.Cells(Row, QTYcol)
+        newqty(changesCount) = oldamount + addAmount
+        'Loc.Worksheet.Cells(Row, QTYcol).Value = Loc.Worksheet.Cells(Row, QTYcol).Value + addAmount
+        
+continue:
     Next ii
+    
+    Dim dispStr As String
+    dispStr = "These Will Be Modified: "
+    
+    For i = 1 To changesCount
+        dispStr = dispStr & vbNewLine & changes(i)
+    Next i
+    
+    If MsgBox(dispStr, vbYesNo) = vbYes Then
+        ActiveSheet.Range("A2:B" & ThisWorkbook.Sheets("Importing").UsedRange.Rows.Count).Delete
+        On Error Resume Next
+        For i = 1 To changesCount
+            qtyCells(i).Value = newqty(i)
+        Next i
+    End If
 End Sub

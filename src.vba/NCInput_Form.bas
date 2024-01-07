@@ -173,7 +173,7 @@ Sub NC_SubmitButton_Click()
     OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
         Clear
     OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
-        Add Key:=Range("MenuTable[[#All],[Surname]]"), SortOn:=xlSortOnValues, _
+        Add Key:=OrigBook.Worksheets("Menu").Range("MenuTable[[#All],[Surname]]"), SortOn:=xlSortOnValues, _
         Order:=xlAscending, DataOption:=xlSortNormal
     With OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort
         .Header = xlYes
