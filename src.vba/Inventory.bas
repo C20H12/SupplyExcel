@@ -18,9 +18,13 @@ End Sub
 Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) As Integer
     Dim wb As Workbook
     ' get object makes it not show up
+    On Error GoTo Copy
     Set wb = GetObject(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
-
+Copy:
+     Set wb = Workbooks.Open(ThisWorkbook.Path & "\Supply_Physical_Inventory.xlsm")
+    
     ' find the right nsn inside the inventory sheet and store it here
+    
     Dim Loc As Range
     
     For Each sh In wb.Worksheets
@@ -64,6 +68,8 @@ Function FindInInventory(nsn As String, Optional closeAfter As Boolean = False) 
     If closeAfter Then
         wb.Close savechanges:=False
     End If
+    
+
 End Function
 
 Sub UpdateInStockStatus()

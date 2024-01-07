@@ -144,3 +144,35 @@ Sub Importing()
     Next ii
 End Sub
 
+Sub ChangeFromOldColorsToNew()
+    Dim ws As Worksheet
+    Dim cell As Range
+
+    ' Set the worksheet variable to the active sheet
+    Set ws = ActiveSheet
+
+    ' Loop through each cell in the worksheet
+    For Each cell In ws.UsedRange
+        ' Check if the cell's interior color is RGB(255, 153, 0)
+        If cell.Interior.Color = RGB(0, 255, 0) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(251, 163, 251)
+        ElseIf cell.Interior.Color = RGB(255, 153, 0) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(244, 176, 132)
+        ElseIf cell.Interior.Color = RGB(74, 134, 232) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(155, 194, 230)
+        ElseIf cell.Interior.Color = RGB(255, 0, 0) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(246, 246, 106)
+        ElseIf cell.Interior.Color = RGB(0, 255, 255) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(146, 208, 80)
+        ElseIf cell.Interior.Color = RGB(142, 124, 195) Then
+            ' Change the cell's interior color to RGB(244, 176, 132)
+            cell.Interior.Color = RGB(255, 255, 255)
+        
+        End If
+    Next cell
+End Sub

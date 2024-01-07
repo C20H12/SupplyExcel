@@ -1,7 +1,18 @@
 Sub pickup()
-
-    Dim origSheet As Worksheet
-    Set origSheet = ActiveSheet
+  ThisWorkbook.Sheets("Pickup").Range("A2").Value = "Generating"
+    Dim lastRow As Long
+    lastRow = ActiveSheet.UsedRange.Rows.count
+    Dim i As Integer
+    For i = 3 To lastRow
+        If Not i = lastRow Then
+            ThisWorkbook.Sheets("Pickup").Rows(3).Delete
+        Else
+             ThisWorkbook.Sheets("Pickup").Rows(2).Delete
+        End If
+    Next i
+    
+    Dim OrigSheet As Worksheet
+    Set OrigSheet = ActiveSheet
     
     Dim ws As Worksheet
     
@@ -9,7 +20,7 @@ Sub pickup()
     PickUpSheetRow = 1
     
     ' remove all buttons so that there is no overlap
-    For Each btn In origSheet.Buttons
+    For Each btn In OrigSheet.Buttons
         If btn.Caption <> "Generate" Then
             btn.Delete
         End If
@@ -30,7 +41,7 @@ Sub pickup()
         hasReadyToPickUp = False
         Dim count As Integer
         count = 0
-        Set nsnRange = ws.Range("A6:A24")
+        Set nsnRange = ws.Range("A6:A26")
         For Each cell In nsnRange
             ReDim Preserve sizes(count)
             sizes(count) = cell.Offset(0, 4).Value
@@ -47,24 +58,29 @@ Sub pickup()
         End If
         
         ' get name
-        origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
-
-        For i = 0 To 18
+        OrigSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
+        Dim linkAddress As String
+        linkAddress = "" & ws.Name & "!A1"
+        OrigSheet.Hyperlinks.Add Anchor:=OrigSheet.Cells(PickUpSheetRow + 1, 1), _
+                          Address:="", _
+                          SubAddress:=linkAddress, _
+                          TextToDisplay:=ws.Range("C2").Value + ", " + ws.Range("E2").Value
+        For i = 0 To 20
             If i = 9 Or i = 14 Or Len(Trim(sizes(i))) = 0 Or status(i) <> "Pick Up" Then
                 GoTo continueinner
             End If
             
             ' fill in the size
-            origSheet.Cells(PickUpSheetRow + 1, i + 2).Value = sizes(i)
+            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Value = sizes(i)
             
             ' highlight if ready to pick up
-            origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
+            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
             
 continueinner:
         Next i
         
         Dim t As Range
-        Set t = origSheet.Cells(PickUpSheetRow + 1, 22)
+        Set t = OrigSheet.Cells(PickUpSheetRow + 1, 24)
         Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
         Dim SheetName As String
         SheetName = """" & ws.Name & """"
@@ -82,6 +98,10 @@ continue:
 End Sub
 
 Sub markPickUpAsComplete(n As String, r As Integer)
+    If MsgBox("Are you sure you want to perform this action?", vbYesNo) = vbNo Then
+            Exit Sub
+    End If
+    
     For Each cell In ActiveWorkbook.Worksheets(n).Range("G6:G24")
         If cell.Value = "Pick Up" Then
             cell.Value = "Complete"

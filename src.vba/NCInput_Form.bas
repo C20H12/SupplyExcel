@@ -18,7 +18,8 @@ Private Sub NC_CancelButton_Click()
 End Sub
 
 Sub NC_SubmitButton_Click()
-
+   Dim OrigBook As Workbook
+   Set OrigBook = ActiveWorkbook
     ' so it does not trigger the cell change events, revert this setting after
     Application.EnableEvents = False
     
@@ -169,12 +170,12 @@ Sub NC_SubmitButton_Click()
                       TextToDisplay:=NC_SurnameInput.Value
                       
         Columns("A:A").Select
-    ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
+    OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
         Clear
-    ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
+    OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort.SortFields. _
         Add Key:=Range("MenuTable[[#All],[Surname]]"), SortOn:=xlSortOnValues, _
         Order:=xlAscending, DataOption:=xlSortNormal
-    With ActiveWorkbook.Worksheets("Menu").ListObjects("MenuTable").Sort
+    With OrigBook.Worksheets("Menu").ListObjects("MenuTable").Sort
         .Header = xlYes
         .MatchCase = False
         .Orientation = xlTopToBottom
