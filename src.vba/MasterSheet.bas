@@ -65,7 +65,7 @@ Sub master()
 
         For i = 0 To 20
         
-            If i = 9 Or i = 14 Or Len(Trim(sizes(i))) = 0 Then
+            If i = 9 Or i = 14 Then
                 GoTo continueinner
             End If
             
