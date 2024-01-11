@@ -31,7 +31,7 @@ Sub master()
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
         If isSpecialSheet(ws.Name) Then
-            GoTo continue
+            GoTo Continue
         End If
         
         ' get all the items' nsn, size, and status in lists
@@ -115,7 +115,7 @@ continueinner:
         
         PickUpSheetRow = PickUpSheetRow + 1
         
-continue:
+Continue:
     Next ws
     
 End Sub

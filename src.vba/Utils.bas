@@ -97,6 +97,6 @@ End Function
 
 Function isSpecialSheet(SheetName As String)
 
-    isSpecialSheet = (SheetName = "Menu" Or SheetName = "Importing" Or SheetName = "Pickup" Or SheetName = "Template" Or SheetName = "Master")
+    isSpecialSheet = (SheetName = "Menu" Or SheetName = "Importing" Or SheetName = "Pickup" Or SheetName = "Template" Or SheetName = "Master" Or SheetName = "Import Sheets")
 
 End Function

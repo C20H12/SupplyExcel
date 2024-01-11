@@ -29,7 +29,7 @@ Sub pickup()
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
         If isSpecialSheet(ws.Name) Then
-            GoTo continue
+            GoTo Continue
         End If
         
         ' get all the items' nsn, size, and status in lists
@@ -54,7 +54,7 @@ Sub pickup()
         Next cell
         
         If Not hasReadyToPickUp Then
-            GoTo continue
+            GoTo Continue
         End If
         
         ' get name
@@ -92,7 +92,7 @@ continueinner:
         
         PickUpSheetRow = PickUpSheetRow + 1
         
-continue:
+Continue:
     Next ws
     
 End Sub
