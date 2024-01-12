@@ -1,9 +1,9 @@
 Sub pickup()
-  ThisWorkbook.Sheets("Pickup").Range("A2").Value = "Generating"
+    ThisWorkbook.Sheets("Pickup").Range("A2").Value = "Generating"
     Dim lastRow As Long
     lastRow = ActiveSheet.UsedRange.Rows.count
     Dim i As Integer
-    For i = 3 To lastRow
+    For i = 2 To lastRow
         If Not i = lastRow Then
             ThisWorkbook.Sheets("Pickup").Rows(3).Delete
         Else
@@ -35,7 +35,7 @@ Sub pickup()
         ' get all the items' nsn, size, and status in lists
         Dim nsnRange As Range
         Dim cell As Range
-        Dim sizes() As Variant
+        Dim sizes() As String
         Dim status() As Variant
         Dim hasReadyToPickUp As Boolean
         hasReadyToPickUp = False
@@ -44,7 +44,7 @@ Sub pickup()
         Set nsnRange = ws.Range("A6:A26")
         For Each cell In nsnRange
             ReDim Preserve sizes(count)
-            sizes(count) = cell.Offset(0, 4).Value
+            sizes(count) = cell.Offset(0, 4).Text
             ReDim Preserve status(count)
             status(count) = cell.Offset(0, 6).Value
             If status(count) = "Pick Up" Then
@@ -70,8 +70,9 @@ Sub pickup()
                 GoTo continueinner
             End If
             
-            ' fill in the size
-            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Value = sizes(i)
+            ' fill in the size, set type to text to keep fractions
+            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).NumberFormat = "@"
+            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Value2 = sizes(i)
             
             ' highlight if ready to pick up
             OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
