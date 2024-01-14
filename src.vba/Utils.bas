@@ -97,6 +97,11 @@ End Function
 
 Function isSpecialSheet(SheetName As String)
 
-    isSpecialSheet = (SheetName = "Menu" Or SheetName = "Importing" Or SheetName = "Pickup" Or SheetName = "Template" Or SheetName = "Master" Or SheetName = "Import Sheets")
+    isSpecialSheet = (SheetName = "Menu" Or SheetName = "Pickup" Or SheetName = "Template" Or SheetName = "Master" Or SheetName = "Import Sheets")
 
+End Function
+
+Function SheetExist(sSheet As String) As Boolean
+    On Error Resume Next
+    SheetExist = (ActiveWorkbook.Sheets(sSheet).Index > 0)
 End Function

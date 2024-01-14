@@ -20,7 +20,7 @@ Sub CreateNewCadetSheet(ByVal sNewSheetName As String)
     
     Columns("H:H").ColumnWidth = 1.78
     Range("H6").Select
-    Application.GoTo Reference:="R6C7"
+    Application.Goto Reference:="R6C7"
     Range("I6").Select
     Columns("G:G").ColumnWidth = 16
     Range("J5").Select

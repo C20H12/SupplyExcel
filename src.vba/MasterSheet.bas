@@ -11,8 +11,8 @@ Sub master()
         End If
     Next i
     
-    Dim OrigSheet As Worksheet
-    Set OrigSheet = ActiveSheet
+    Dim origSheet As Worksheet
+    Set origSheet = ActiveSheet
     
     Dim ws As Worksheet
     
@@ -22,7 +22,7 @@ Sub master()
     ActiveWorkbook.Worksheets("Master").ListObjects("StatusTable").AutoFilter.ShowAllData
     
    ' remove all buttons so that there is no overlap
-    For Each btn In OrigSheet.Buttons
+    For Each btn In origSheet.Buttons
         If btn.Caption <> "Generate" Then
             btn.Delete
         End If
@@ -31,7 +31,7 @@ Sub master()
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
         If isSpecialSheet(ws.Name) Then
-            GoTo Continue
+            GoTo continue
         End If
         
         ' get all the items' nsn, size, and status in lists
@@ -51,10 +51,10 @@ Sub master()
         Next cell
         
         ' get name
-        OrigSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
+        origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
         Dim linkAddress As String
         linkAddress = "" & ws.Name & "!A1"
-        OrigSheet.Hyperlinks.Add Anchor:=OrigSheet.Cells(PickUpSheetRow + 1, 1), _
+        origSheet.Hyperlinks.Add Anchor:=origSheet.Cells(PickUpSheetRow + 1, 1), _
                           Address:="", _
                           SubAddress:=linkAddress, _
                           TextToDisplay:=ws.Range("C2").Value + ", " + ws.Range("E2").Value
@@ -62,6 +62,8 @@ Sub master()
     
         Dim hasIncomplete As Boolean
         hasIncomplete = False
+        Dim statusString As String
+        statusString = ""
 
         For i = 0 To 20
         
@@ -70,42 +72,47 @@ Sub master()
             End If
             
             ' fill in the size
-            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Value = sizes(i)
+            origSheet.Cells(PickUpSheetRow + 1, i + 2).Value = sizes(i)
             
             ' highlight
             If status(i) = "UNP" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(255, 117, 117)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(255, 117, 117)
             ElseIf status(i) = "In Stock" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(251, 163, 251)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(251, 163, 251)
             ElseIf status(i) = "Pick Up" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(146, 208, 80)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(146, 208, 80)
             ElseIf status(i) = "Ready To Order" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(246, 246, 106)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(246, 246, 106)
             ElseIf status(i) = "Ordered" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(244, 176, 132)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(244, 176, 132)
             ElseIf status(i) = "Complete" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(155, 194, 230)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(155, 194, 230)
             ElseIf status(i) = "Returned" Then
-              OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(128, 128, 128)
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(128, 128, 128)
             End If
             
             If status(i) <> "Complete" Then
                 hasIncomplete = True
             End If
+
+            If Not InStr(statusString, status(i)) > 0 Then
+                statusString = status(i) & "," & statusString
+            End If
             
 continueinner:
         Next i
         
+        origSheet.Cells(PickUpSheetRow + 1, 24).Value = statusString
         
         ' highlight name as red if not all complete
         If hasIncomplete Then
-            OrigSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(252, 136, 136)
+            origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(252, 136, 136)
         Else
-            OrigSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(140, 255, 140)
+            origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(140, 255, 140)
         End If
         
         Dim t As Range
-        Set t = OrigSheet.Cells(PickUpSheetRow + 1, 23)
+        Set t = origSheet.Cells(PickUpSheetRow + 1, 23)
         Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
         With btn
           .OnAction = "'togglePersonAsComplete " & PickUpSheetRow + 1 & "'"
@@ -115,7 +122,7 @@ continueinner:
         
         PickUpSheetRow = PickUpSheetRow + 1
         
-Continue:
+continue:
     Next ws
     
 End Sub

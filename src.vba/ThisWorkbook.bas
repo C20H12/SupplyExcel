@@ -3,13 +3,24 @@ Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
         Exit Sub
     End If
     
+    If IsStringEmpty(Target.Value) Then
+        Target.Offset(0, -4).Value = "Empty Size"
+        Exit Sub
+    End If
+    
     ' check the cells from e6 to e24 (sizes), if changed, run code
     Dim RangeToCheck As Range
     Set RangeToCheck = sh.Range("E6:E24")
 
     If Not Application.Intersect(RangeToCheck, Target) Is Nothing Then
+        Dim sizeName As String
+        sizeName = Target.Offset(0, -3).Value
         Dim NSNResult As String
-        NSNResult = GetNSNFromSize(Target.Offset(0, -3).Value, Target.Value, sh.Range("G4").Value = "Male")
+        NSNResult = GetNSNFromSize(sizeName, Target.Value, sh.Range("G4").Value = "Male")
+        ' check both genders if shirts or pants, if it fails to get an nsn using current gender
+        If IsStringEmpty(NSNResult) And (sizeName = "Collar Shirt" Or sizeName = "Dress Pants") Then
+            NSNResult = GetNSNFromSize(sizeName, Target.Value, sh.Range("G4").Value <> "Male")
+        End If
         If IsStringEmpty(NSNResult) Then
             NSNResult = "Invalid size"
         End If

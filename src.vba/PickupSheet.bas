@@ -11,8 +11,8 @@ Sub pickup()
         End If
     Next i
     
-    Dim OrigSheet As Worksheet
-    Set OrigSheet = ActiveSheet
+    Dim origSheet As Worksheet
+    Set origSheet = ActiveSheet
     
     Dim ws As Worksheet
     
@@ -20,7 +20,7 @@ Sub pickup()
     PickUpSheetRow = 1
     
     ' remove all buttons so that there is no overlap
-    For Each btn In OrigSheet.Buttons
+    For Each btn In origSheet.Buttons
         If btn.Caption <> "Generate" Then
             btn.Delete
         End If
@@ -29,7 +29,7 @@ Sub pickup()
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
         If isSpecialSheet(ws.Name) Then
-            GoTo Continue
+            GoTo continue
         End If
         
         ' get all the items' nsn, size, and status in lists
@@ -54,14 +54,14 @@ Sub pickup()
         Next cell
         
         If Not hasReadyToPickUp Then
-            GoTo Continue
+            GoTo continue
         End If
         
         ' get name
-        OrigSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
+        origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
         Dim linkAddress As String
         linkAddress = "" & ws.Name & "!A1"
-        OrigSheet.Hyperlinks.Add Anchor:=OrigSheet.Cells(PickUpSheetRow + 1, 1), _
+        origSheet.Hyperlinks.Add Anchor:=origSheet.Cells(PickUpSheetRow + 1, 1), _
                           Address:="", _
                           SubAddress:=linkAddress, _
                           TextToDisplay:=ws.Range("C2").Value + ", " + ws.Range("E2").Value
@@ -71,17 +71,17 @@ Sub pickup()
             End If
             
             ' fill in the size, set type to text to keep fractions
-            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).NumberFormat = "@"
-            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Value2 = sizes(i)
+            origSheet.Cells(PickUpSheetRow + 1, i + 2).NumberFormat = "@"
+            origSheet.Cells(PickUpSheetRow + 1, i + 2).Value2 = sizes(i)
             
             ' highlight if ready to pick up
-            OrigSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
+            origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(176, 255, 177)
             
 continueinner:
         Next i
         
         Dim t As Range
-        Set t = OrigSheet.Cells(PickUpSheetRow + 1, 24)
+        Set t = origSheet.Cells(PickUpSheetRow + 1, 24)
         Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
         Dim SheetName As String
         SheetName = """" & ws.Name & """"
@@ -93,7 +93,7 @@ continueinner:
         
         PickUpSheetRow = PickUpSheetRow + 1
         
-Continue:
+continue:
     Next ws
     
 End Sub

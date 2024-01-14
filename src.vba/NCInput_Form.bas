@@ -125,12 +125,12 @@ Sub NC_SubmitButton_Click()
     MeasuredSizes.Add Not NC_FemaleInput, "IsMale"
     
     For i = 6 To 24
-        Dim SizeName As String
-        SizeName = CreatedSheet.Range("B" & i).Value
+        Dim sizeName As String
+        sizeName = CreatedSheet.Range("B" & i).Value
                 
-        If Not IsStringEmpty(SizeName) Then
+        If Not IsStringEmpty(sizeName) Then
             Dim ReturnedSize As String
-            ReturnedSize = GetSize(SizeName, MeasuredSizes)
+            ReturnedSize = GetSize(sizeName, MeasuredSizes)
             If Not IsStringEmpty(ReturnedSize) Then
                 Dim SplittedSize() As String
                 SplittedSize = Split(ReturnedSize, "===")

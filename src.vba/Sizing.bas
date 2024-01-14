@@ -333,7 +333,7 @@ Private Function GetSizingData_fpants() As Collection
     Dim Keys_62e5b0() As Variant
     Keys_62e5b0 = Array(34.5)
     Value_60_f7dc5b.Add Keys_62e5b0, "Keys"
-    Value_60_f7dc5b.Add "6024===8410-20-002-4787", "34.5"
+    Value_60_f7dc5b.Add "6024 H===8410-20-002-4787", "34.5"
     Value_24_5_dd1c12.Add Value_60_f7dc5b, "60"
     Value_data_1801fd.Add Value_24_5_dd1c12, "24.5"
     Dim Value_25_5_cf6802 As Collection
@@ -346,7 +346,7 @@ Private Function GetSizingData_fpants() As Collection
     Dim Keys_ddc128() As Variant
     Keys_ddc128 = Array(35.5)
     Value_60_44e265.Add Keys_ddc128, "Keys"
-    Value_60_44e265.Add "6025===8410-20-002-4791", "35.5"
+    Value_60_44e265.Add "6025 H===8410-20-002-4791", "35.5"
     Value_25_5_cf6802.Add Value_60_44e265, "60"
     Value_data_1801fd.Add Value_25_5_cf6802, "25.5"
     Dim Value_26_5_c9847c As Collection
@@ -359,7 +359,7 @@ Private Function GetSizingData_fpants() As Collection
     Dim Keys_21238b() As Variant
     Keys_21238b = Array(36.5)
     Value_60_16fe4b.Add Keys_21238b, "Keys"
-    Value_60_16fe4b.Add "6026===8410-20-002-4793", "36.5"
+    Value_60_16fe4b.Add "6026 H===8410-20-002-4793", "36.5"
     Value_26_5_c9847c.Add Value_60_16fe4b, "60"
     Value_data_1801fd.Add Value_26_5_c9847c, "26.5"
     Dim Value_27_5_1814f9 As Collection
@@ -2854,7 +2854,10 @@ Function GetNSNFromSize(ItemType As String, size As String, IsMale As Boolean) A
         Set SizingData = GetSizingData_socks
     ElseIf ItemType = "Leather Boots" Then
         Set SizingData = GetSizingData_boots
-    ' ignore toque
+    ElseIf ItemType = "Toque" Then
+        ' touque is uni sized
+        GetNSNFromSize = "8405-21-907-9466"
+        Exit Function
     ElseIf ItemType = "Tilly" Then
         Set SizingData = GetSizingData_tilly
     ElseIf ItemType = "Parka" Then
@@ -2870,7 +2873,7 @@ Function GetNSNFromSize(ItemType As String, size As String, IsMale As Boolean) A
     ElseIf ItemType = "FTU Boots" Then
         Set SizingData = GetSizingData_FTUboots
     Else
-        GetNSNFromSize = "Invalid"
+        GetNSNFromSize = "Invalid Type"
         Exit Function
     End If
     
@@ -2909,7 +2912,7 @@ Function p_GetNSNFromSize(LevelData As Collection, TargetSize As String) As Stri
             SizeAndNSN = Split(NSNResult, "===")
             'Debug.Print "split", SizeAndNSN(0)
             ' If the size matches the given size, return the NSN
-            If SizeAndNSN(0) = TargetSize Then
+            If Not IsStringEmpty(TargetSize) And (SizeAndNSN(0) = TargetSize Or InStr(SizeAndNSN(0), TargetSize) > 0) Then
                 p_GetNSNFromSize = SizeAndNSN(1)
                 Exit Function
             End If

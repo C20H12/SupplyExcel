@@ -168,12 +168,12 @@ Private Sub EX_SubmitButton_Click()
     MeasuredSizes.Add Not EX_FemaleInput, "IsMale"
     
     For i = 6 To 24
-        Dim SizeName As String
-        SizeName = Sheets(sNewSheetName).Range("B" & i).Value
+        Dim sizeName As String
+        sizeName = Sheets(sNewSheetName).Range("B" & i).Value
                 
-        If Not IsStringEmpty(SizeName) Then
+        If Not IsStringEmpty(sizeName) Then
             Dim ReturnedSize As String
-            ReturnedSize = GetSize(SizeName, MeasuredSizes)
+            ReturnedSize = GetSize(sizeName, MeasuredSizes)
             If Not IsStringEmpty(ReturnedSize) Then
                 Dim SplittedSize() As String
                 SplittedSize = Split(ReturnedSize, "===")

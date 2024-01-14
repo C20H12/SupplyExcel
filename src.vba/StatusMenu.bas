@@ -55,7 +55,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
                     foundStatus = foundStatus & SearchString
                 End If
             Next SearchString
-            
+
             
             If foundStatus <> "" Then
                 ' prioritize and update the Menu sheet with the first found status
