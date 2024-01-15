@@ -83,7 +83,7 @@ Sub ImportFromOldSheet()
 
         LastName = ws.Cells(Row, 1)
         FirstName = ws.Cells(Row, 2)
-        Rank = IIf(IsStringEmpty(ws.Cells(Row, 30)), "AC", ws.Cells(Row, 32))
+        Rank = IIf(IsStringEmpty(ws.Cells(Row, 30)), "AC", ws.Cells(Row, 30))
         Gender = ws.Cells(Row, 3) = "Male"
         Head = ws.Cells(Row, 4)
         Neck = ws.Cells(Row, 5)
@@ -255,25 +255,23 @@ End Sub
 Sub ExportData()
     Application.EnableEvents = False
     
-    Dim lastRow As Long
-    lastRow = ActiveSheet.UsedRange.Rows.count
-    Dim i As Integer
-    For i = 3 To lastRow
-        If Not i = lastRow Then
-            ThisWorkbook.Sheets("Import Sheets").Rows(3).Delete
-        Else
-             ThisWorkbook.Sheets("Import Sheets").Rows(2).Delete
-        End If
-    Next i
+    Dim OrigBook As Workbook, OutBook As Workbook
+    Set OrigBook = ThisWorkbook
+    Set OutBook = Workbooks.Add
+    OutBook.SaveAs OrigBook.Path & Application.PathSeparator & "Supply_2.0_Exported_Data.xlsx"
     
     Dim ows As Worksheet
-    Set ows = ThisWorkbook.Sheets("Import Sheets")
+    Set ows = OutBook.Sheets("Sheet1")
     Dim ws As Worksheet
     
-    For Each ws In ThisWorkbook.Sheets
+    Dim Row As Integer
+    Row = 0
+    
+    For Each ws In OrigBook.Sheets
         If isSpecialSheet(ws.Name) Then
             GoTo continue
         End If
+        
         ' Map all the variables needed to a cell in the row
         Dim LastName As String
         Dim FirstName As String
@@ -287,8 +285,7 @@ Sub ExportData()
         Dim Height As String
         Dim FootL As String
         Dim FootW As String
-        Dim Row As Integer
-        Row = ActiveSheet.UsedRange.Rows.count + 1
+        Row = Row + 1
         
         ows.Cells(Row, 1) = ws.Range("C2").Value    ' User Last Name
         ows.Cells(Row, 2) = ws.Range("E2").Value    ' User First Name
@@ -301,79 +298,68 @@ Sub ExportData()
         ows.Cells(Row, 9) = ws.Range("L7").Value    ' User Height
         ows.Cells(Row, 10) = ws.Range("L8").Value   ' User Foot Length
         ows.Cells(Row, 11) = ws.Range("L9").Value   ' User Foot Width
-
         
+        ows.Cells(Row, 29) = ws.Range("G2").Value   ' User ID
+        ows.Cells(Row, 30) = ws.Range("B2").Value   ' User Rank
+        ows.Cells(Row, 31) = ws.Range("L10").Value   ' User Hand
         
         ows.Cells(Row, 12) = ws.Cells(6, 5)  ' Tunic
         ows.Cells(Row, 12).Interior.Color = ws.Cells(6, 7).DisplayFormat.Interior.Color
         
-        If ows.Cells(Row, 3) = "Male" Then
-            ows.Cells(Row, 13) = ws.Cells(9, 5)
-            ows.Cells(Row, 13).Interior.Color = ws.Cells(9, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 14) = ws.Cells(7, 5) 'Shirts
+        ows.Cells(Row, 14).Interior.Color = ws.Cells(7, 7).DisplayFormat.Interior.Color
         
-            ows.Cells(Row, 15) = ws.Cells(7, 5)
-            ows.Cells(Row, 15).Interior.Color = ws.Cells(7, 7).DisplayFormat.Interior.Color
-        ElseIf ows.Cells(Row, 3) = "Female" Then
-            ows.Cells(Row, 14) = ws.Cells(9, 5)
-            ows.Cells(Row, 14).Interior.Color = ws.Cells(9, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 15) = ws.Cells(8, 5)   ' TShirt
+        ows.Cells(Row, 15).Interior.Color = ws.Cells(8, 7).DisplayFormat.Interior.Color
         
-            ows.Cells(Row, 16) = ws.Cells(7, 5)
-            ows.Cells(Row, 16).Interior.Color = ws.Cells(7, 7).DisplayFormat.Interior.Color
-        End If
+        ows.Cells(Row, 13) = ws.Cells(9, 5) ' Pants
+        ows.Cells(Row, 13).Interior.Color = ws.Cells(9, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 17) = ws.Cells(8, 5)   ' TShirt
-        ows.Cells(Row, 17).Interior.Color = ws.Cells(8, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 16) = ws.Cells(10, 5)  ' Wedge
+        ows.Cells(Row, 16).Interior.Color = ws.Cells(10, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 18) = ws.Cells(10, 5)  ' Wedge
-        ows.Cells(Row, 18).Interior.Color = ws.Cells(10, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 17) = ws.Cells(11, 5)  ' Tie
+        ows.Cells(Row, 17).Interior.Color = ws.Cells(11, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 19) = ws.Cells(11, 5)  ' Tie
-        ows.Cells(Row, 19).Interior.Color = ws.Cells(11, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 18) = ws.Cells(12, 5)  ' PantBelt
+        ows.Cells(Row, 18).Interior.Color = ws.Cells(12, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 20) = ws.Cells(12, 5)  ' PantBelt
-        ows.Cells(Row, 20).Interior.Color = ws.Cells(12, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 19) = ws.Cells(13, 5)  ' Socks
+        ows.Cells(Row, 19).Interior.Color = ws.Cells(13, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 21) = ws.Cells(13, 5)  ' Socks
-        ows.Cells(Row, 21).Interior.Color = ws.Cells(13, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 20) = ws.Cells(14, 5)  ' Boots
+        ows.Cells(Row, 20).Interior.Color = ws.Cells(14, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 22) = ws.Cells(14, 5)  ' Boots
-        ows.Cells(Row, 22).Interior.Color = ws.Cells(14, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 26) = ws.Cells(21, 5)  ' Beret
-        ows.Cells(Row, 26).Interior.Color = ws.Cells(26, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 27) = ws.Cells(16, 5)  ' Toque
+        ows.Cells(Row, 27).Interior.Color = ws.Cells(16, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 23) = ws.Cells(22, 5)  ' FTUShirt
-        ows.Cells(Row, 23).Interior.Color = ws.Cells(22, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 28) = ws.Cells(17, 5)  ' Tilly
+        ows.Cells(Row, 28).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 24) = ws.Cells(23, 5)  ' FTUPants
-        ows.Cells(Row, 24).Interior.Color = ws.Cells(23, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 25) = ws.Cells(17, 5)  ' Parka
+        ows.Cells(Row, 25).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 25) = ws.Cells(24, 5)  ' FTUBoots
-        ows.Cells(Row, 25).Interior.Color = ws.Cells(24, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 26) = ws.Cells(18, 5)  ' Gloves
+        ows.Cells(Row, 26).Interior.Color = ws.Cells(18, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 29) = ws.Cells(16, 5)  ' Toque
-        ows.Cells(Row, 29).Interior.Color = ws.Cells(16, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 30) = ws.Cells(17, 5)  ' Tilly
-        ows.Cells(Row, 30).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 24) = ws.Cells(21, 5)  ' Beret
+        ows.Cells(Row, 24).Interior.Color = ws.Cells(26, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 27) = ws.Cells(17, 5)  ' Parka
-        ows.Cells(Row, 27).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 21) = ws.Cells(22, 5)  ' FTUShirt
+        ows.Cells(Row, 21).Interior.Color = ws.Cells(22, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 28) = ws.Cells(18, 5)  ' Gloves
-        ows.Cells(Row, 28).Interior.Color = ws.Cells(18, 7).DisplayFormat.Interior.Color
+        ows.Cells(Row, 22) = ws.Cells(23, 5)  ' FTUPants
+        ows.Cells(Row, 22).Interior.Color = ws.Cells(23, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 31) = ws.Range("G2").Value  ' ID
-        ows.Cells(Row, 31).Interior.Color = ws.Range("G2").Interior.Color
-        
-        ows.Cells(Row, 32) = ws.Range("B2").Value  ' Rank
-        ows.Cells(Row, 32).Interior.Color = ws.Range("B2").Interior.Color
-        
-        ows.Cells(Row, 33) = ws.Range("L10").Value ' Hand
+        ows.Cells(Row, 23) = ws.Cells(24, 5)  ' FTUBoots
+        ows.Cells(Row, 23).Interior.Color = ws.Cells(24, 7).DisplayFormat.Interior.Color
 
 continue:
     Next ws
- 
+    
+    OutBook.Close True
     Application.EnableEvents = True
 End Sub
 
