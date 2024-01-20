@@ -37,7 +37,7 @@ Function GetUUID() As String
     Dim uuid(7) As Integer
     Randomize
     For i = 0 To 7
-        uuid(i) = Int(Rnd() * 16)
+        uuid(i) = Int(Rnd() * 14)
     Next i
     uuid(6) = uuid(6) And (Not 4)
     uuid(6) = uuid(6) Or 8
@@ -45,6 +45,7 @@ Function GetUUID() As String
     For i = 0 To 7
         uuidString = uuidString & Hex(uuid(i))
     Next i
+    Debug.Print uuidString
     GetUUID = uuidString
 End Function
 

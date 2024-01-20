@@ -337,10 +337,10 @@ Sub ExportData()
         ows.Cells(Row, 28) = ws.Cells(17, 5)  ' Tilly
         ows.Cells(Row, 28).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 25) = ws.Cells(17, 5)  ' Parka
+        ows.Cells(Row, 25) = ws.Cells(18, 5)  ' Parka
         ows.Cells(Row, 25).Interior.Color = ws.Cells(17, 7).DisplayFormat.Interior.Color
         
-        ows.Cells(Row, 26) = ws.Cells(18, 5)  ' Gloves
+        ows.Cells(Row, 26) = ws.Cells(19, 5)  ' Gloves
         ows.Cells(Row, 26).Interior.Color = ws.Cells(18, 7).DisplayFormat.Interior.Color
         
         

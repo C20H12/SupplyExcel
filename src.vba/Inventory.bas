@@ -73,15 +73,17 @@ Copy:
 End Function
 
 Sub UpdateInStockStatus()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
     For i = 6 To 24
         Dim nsn As String
-        nsn = ActiveSheet.Range("A" & i).Value
+        nsn = ws.Range("A" & i).Value
         Dim status As String
-        status = ActiveSheet.Range("G" & i).Value
+        status = ws.Range("G" & i).Value
                 
         If Not IsStringEmpty(nsn) And status = "UNP" Then
             If FindInInventory(nsn) > 0 Then
-                ActiveSheet.Range("G" & i).Value = "In Stock"
+                ws.Range("G" & i).Value = "In Stock"
             End If
         End If
     Next i

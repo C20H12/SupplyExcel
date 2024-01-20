@@ -2,12 +2,17 @@ Sub master()
     ThisWorkbook.Sheets("Master").Range("A3").Value = "Generating"
     Dim lastRow As Long
     lastRow = ActiveSheet.UsedRange.Rows.count
+    Dim nameStatus() As Variant
     Dim i As Integer
     For i = 3 To lastRow
+        'store the color on the name cell (status set by the user)
+        ReDim Preserve nameStatus(i - 2)
         If Not i = lastRow Then
+            nameStatus(i - 2) = ThisWorkbook.Sheets("Master").Cells(4, 1).Interior.Color
             ThisWorkbook.Sheets("Master").Rows(4).Delete
         Else
-             ThisWorkbook.Sheets("Master").Rows(3).Delete
+            nameStatus(0) = ThisWorkbook.Sheets("Master").Cells(3, 1).Interior.Color
+            ThisWorkbook.Sheets("Master").Rows(3).Delete
         End If
     Next i
     
@@ -124,6 +129,11 @@ continueinner:
         
 continue:
     Next ws
+    
+    ' restore color
+    For i = 0 To lastRow - 3
+        origSheet.Cells(i + 3, 1).Interior.Color = nameStatus(i)
+    Next i
     
 End Sub
 
