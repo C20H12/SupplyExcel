@@ -25,20 +25,20 @@ Private Sub UserForm_Initialize()
         Width = 500
     End With
     
-'    EX_TShirtToggle = True
-'    EX_FirstNameInput = "john"
-'    EX_SurnameInput = "ignoroff"
-'    EX_RankInput = "AC"
-'    EX_HeadInput.Value = GenerateRandomMeasurement(19, 26)
-'    EX_NeckInput.Value = GenerateRandomMeasurement(12.5, 20)
-'    EX_ChestInput.Value = GenerateRandomMeasurement(24, 64)
-'    EX_WaistInput.Value = GenerateRandomMeasurement(30, 63)
-'    EX_HipsInput.Value = GenerateRandomMeasurement(30, 68)
-'    EX_HeightInput.Value = GenerateRandomMeasurement(55, 76)
-'    EX_FootLInput.Value = GenerateRandomMeasurement(215, 330)
-'    EX_FootWInput.Value = GenerateRandomMeasurement(85, 130)
-'    EX_HandLInput.Value = GenerateRandomMeasurement(6, 10)
-'    EX_FemaleInput.Value = GenerateRandomFemale()
+   EX_TShirtToggle = True
+    EX_FirstNameInput = "john"
+    EX_SurnameInput = "ignoroff"
+    EX_RankInput = "AC"
+    EX_HeadInput.Value = GenerateRandomMeasurement(19, 26)
+    EX_NeckInput.Value = GenerateRandomMeasurement(12.5, 20)
+    EX_ChestInput.Value = GenerateRandomMeasurement(24, 45)
+    EX_WaistInput.Value = GenerateRandomMeasurement(30, 45)
+    EX_HipsInput.Value = GenerateRandomMeasurement(30, 45)
+    EX_HeightInput.Value = GenerateRandomMeasurement(55, 76)
+    EX_FootLInput.Value = GenerateRandomMeasurement(215, 330)
+    EX_FootWInput.Value = GenerateRandomMeasurement(85, 130)
+    EX_HandLInput.Value = GenerateRandomMeasurement(6, 10)
+    EX_FemaleInput.Value = GenerateRandomFemale()
 End Sub
 
 ' # Form controls
@@ -70,7 +70,7 @@ Private Sub EX_SubmitButton_Click()
     ' Validate EX_FirstNameInput, EX_SurnameInput, EX_RankInput
     ValidateResults(1) = ValidateText(EX_FirstNameInput)
     ValidateResults(2) = ValidateText(EX_SurnameInput)
-    ValidateResults(3) = ValidateText(EX_RankInput)
+    ValidateResults(3) = ValidateBlank(EX_RankInput)
     
     For i = 1 To 3
         Dim ValidateResultMsg As String
@@ -241,24 +241,28 @@ Private Sub EX_SubmitButton_Click()
         End If
     Next SelectedButton
     
-  
+   Dim numList As Variant
+    numList = Array(15, 20, 25)
+
+    
     For i = 6 To 26
-        If Not IsInArray(nws.Range("B" & CStr(i)).Value, SelectedItems()) Then
-            ' Clear the value in column E for the current row
-            nws.Range("E" & CStr(i)).Value = "---------"
-            nws.Range("A" & CStr(i)).Value = ""
-            nws.Range("G" & CStr(i)).Value = "Complete"
-        Else
-            ' Add a new row to the ExchangeTable
-            Dim NewRow As ListRow
-            Set NewRow = extbl.ListRows.Add
-            NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
-            NewRow.Range.Cells(1, 2) = nws.Range("B" & CStr(i)).Value
-            NewRow.Range.Cells(1, 3) = InputBox("Previous " & nws.Range("B" & CStr(i)).Value & " Size", "Exchange Data")
-            NewRow.Range.Cells(1, 4) = nws.Range("E" & CStr(i)).Value
+        If IsError(Application.Match(i, numList, 0)) Then
+            If Not IsInArray(nws.Range("B" & CStr(i)).Value, SelectedItems()) Then
+                ' Clear the value in column E for the current row
+                nws.Range("E" & CStr(i)).Value = "---------"
+                nws.Range("A" & CStr(i)).Value = ""
+                nws.Range("G" & CStr(i)).Value = "Complete"
+            Else
+                ' Add a new row to the ExchangeTable
+                Dim NewRow As ListRow
+                Set NewRow = extbl.ListRows.Add
+                NewRow.Range.Cells(1, 1) = Format(Date, "yyyy-mm-dd")
+                NewRow.Range.Cells(1, 2) = nws.Range("B" & CStr(i)).Value
+                NewRow.Range.Cells(1, 3) = InputBox("Previous " & nws.Range("B" & CStr(i)).Value & " Size", "Exchange Data")
+                NewRow.Range.Cells(1, 4) = nws.Range("E" & CStr(i)).Value
+            End If
         End If
     Next i
-
     
     
     Application.EnableEvents = True

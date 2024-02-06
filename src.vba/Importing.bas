@@ -299,6 +299,10 @@ Sub ImportFromOldSheet()
 continue:
     Next Row
 
+For i = 2 To Numinputs
+    ws.Rows(2).Delete
+Next i
+
     Application.EnableEvents = True
 End Sub
 
@@ -310,7 +314,7 @@ Sub ExportData()
     Set OrigBook = ThisWorkbook
     Set OutBook = Workbooks.Add
     formattedDateTime = Format(Now, "hh-mm-ss")
-    OutBook.SaveAs OrigBook.Path & Application.PathSeparator & "Exported_Data at" & formattedDateTime & ".xlsx"
+    OutBook.SaveAs OrigBook.Path & Application.PathSeparator & "Exported_Data at " & formattedDateTime & ".xlsx"
     
     Dim ows As Worksheet
     Set ows = OutBook.Sheets("Sheet1")
@@ -419,30 +423,10 @@ Sub ExportData()
        
 continue:
     Next ws
-    
-    Dim i As Integer
-    Dim Fraction As String
-    lastRow = ows.UsedRange.Rows.count
-    
-    For i = 2 To lastRow
-        Number = ows.Cells(i, 19).Value
-        If Not Number = Int(Number) Then
-            ows.Cells(i, 19).NumberFormat = "@"
-            Fraction = DecimalToComplexFraction(Number)
-            ows.Cells(i, 19).Value = Fraction
-        End If
-    Next i
-    
-    For i = 2 To lastRow
-        Number = ows.Cells(i, 27).Value
-        If Not Number = Int(Number) Then
-            ows.Cells(i, 27).NumberFormat = "@"
-            Fraction = DecimalToComplexFraction(Number)
-            ows.Cells(i, 27).Value = Fraction
-        End If
-    Next i
-        
-    OutBook.Close True
+
+ows.Columns(19).NumberFormat = "@"
+ows.Columns(27).NumberFormat = "@"
+
     Application.EnableEvents = True
 End Sub
 

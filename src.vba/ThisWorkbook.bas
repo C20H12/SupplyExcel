@@ -3,16 +3,18 @@ Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
         Exit Sub
     End If
     
-    If IsStringEmpty(Target.Value) Then
-        Target.Offset(0, -4).Value = "Empty Size"
-        Exit Sub
-    End If
+   
     
     ' check the cells from e6 to e24 (sizes), if changed, run code
     Dim RangeToCheck As Range
     Set RangeToCheck = sh.Range("E6:E24")
 
     If Not Application.Intersect(RangeToCheck, Target) Is Nothing Then
+         If IsStringEmpty(Target.Value) Then
+            Target.Offset(0, -4).Value = "Empty Size"
+            Exit Sub
+        End If
+    
         Dim sizeName As String
         sizeName = Target.Offset(0, -3).Value
         Dim NSNResult As String

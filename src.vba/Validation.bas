@@ -35,3 +35,12 @@ Function ValidateCustom(InputBox As MSForms.TextBox, Condition As Boolean, Messa
         ValidateCustom = ""
     End If
 End Function
+
+
+Function ValidateBlank(InputBox As MSForms.TextBox) As String
+    If IsStringEmpty(InputBox.Value) Then
+        MsgBox "Please enter a value for " & InputBox.Tag, vbExclamation, "Input Error"
+    Else
+        ValidateBlank = ""
+    End If
+End Function
