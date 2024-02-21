@@ -66,6 +66,8 @@ Sub ReCalculateSize(Optional ItemNameToChange As String)
             
                     ActiveSheet.Range("E" & i).Value = SplittedSize(0)
                     ActiveSheet.Range("A" & i).Value = SplittedSize(1)
+                Else
+                    MsgBox "Unable to find a valid item to exchange, check the size input."
                 End If
             End If
         End If

@@ -115,8 +115,8 @@ Sub import()
         oldamount = Loc.Worksheet.Cells(Row, QTYcol).Value
         changes(changesCount) = changes(changesCount) & "From " & oldamount & " to " & oldamount + addAmount
         Set qtyCells(changesCount) = Loc.Worksheet.Cells(Row, QTYcol)
-        newqty(changesCount) = oldamount + addAmount
-        'Loc.Worksheet.Cells(Row, QTYcol).Value = Loc.Worksheet.Cells(Row, QTYcol).Value + addAmount
+        ' store the amount to add to avoid duplicate NSNs only get added once
+        newqty(changesCount) = addAmount
         
 continue:
     Next ii
@@ -132,7 +132,7 @@ continue:
         ActiveSheet.Range("A2:B" & ThisWorkbook.Sheets("Importing").UsedRange.Rows.Count).Delete
         On Error Resume Next
         For i = 1 To changesCount
-            qtyCells(i).Value = newqty(i)
+            qtyCells(i).Value = qtyCells(i).Value + newqty(i)
         Next i
     End If
 End Sub

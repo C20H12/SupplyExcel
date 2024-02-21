@@ -81,7 +81,7 @@ continueinner:
         Next i
         
         Dim t As Range
-        Set t = origSheet.Cells(PickUpSheetRow + 1, 24)
+        Set t = origSheet.Cells(PickUpSheetRow + 1, 26)
         Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
         Dim SheetName As String
         SheetName = """" & ws.Name & """"
@@ -103,7 +103,7 @@ Sub markPickUpAsComplete(n As String, r As Integer)
             Exit Sub
     End If
     
-    For Each cell In ActiveWorkbook.Worksheets(n).Range("G6:G24")
+    For Each cell In ActiveWorkbook.Worksheets(n).Range("G6:G26")
         If cell.Value = "Pick Up" Then
             cell.Value = "Complete"
         End If

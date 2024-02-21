@@ -50,7 +50,7 @@ Sub NC_SubmitButton_Click()
     If NC_EnableValidate Then
         ValidateResults(15) = ValidateRange(NC_HeadInput, 19, 24.6)
         ValidateResults(16) = ValidateRange(NC_NeckInput, 12.5, 20)
-        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 64)
+        ValidateResults(17) = ValidateRange(NC_ChestInput, 24, 53)
         ValidateResults(18) = ValidateRange(NC_WaistInput, 30, 63)
         ValidateResults(19) = ValidateRange(NC_HipsInput, 30, 68)
         ValidateResults(20) = ValidateRange(NC_HeightInput, 55, 76)

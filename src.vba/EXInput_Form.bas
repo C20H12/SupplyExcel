@@ -315,7 +315,7 @@ Private Function EX_DataValidation()
     End If
     If ChestCount > 0 Then
       ValidateResults(5) = ValidateNumber(EX_ChestInput)
-      ValidateResults(6) = ValidateRange(EX_ChestInput, 24, 64)
+      ValidateResults(6) = ValidateRange(EX_ChestInput, 24, 53)
     End If
     If WaistCount > 0 Then
       ValidateResults(7) = ValidateNumber(EX_WaistInput)
