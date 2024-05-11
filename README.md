@@ -1,4 +1,5 @@
 # Supply 2.0
+Important Note: The data utilized in this software has been sourced responsibly and does not incorporate any private or personally identifiable information.
 
 __Supply 2.0__ is a fully functional tool designed to serve the uniform distribution needs for all air cadet squadrons in Canada. It is designed to run on the excel app on the desktop. The below document will briefly describe its functionalities.
 
