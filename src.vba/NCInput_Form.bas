@@ -31,9 +31,6 @@ Sub NC_SubmitButton_Click()
     ValidateResults(2) = ValidateText(NC_SurnameInput)
     ValidateResults(3) = ValidateText(NC_RankInput)
 
-    ' Validate NC_TelephoneInput
-    'ValidateResults(4) = ValidateNumber(NC_TelephoneInput)
-    'ValidateResults(5) = ValidateCustom(NC_TelephoneInput, Len(NC_TelephoneInput.Value) <> 10, "Telephone Number must be 10 digits.")
     
     ' Validate each size input to check if input is a number
     ValidateResults(6) = ValidateNumber(NC_HeadInput)
@@ -74,11 +71,18 @@ Sub NC_SubmitButton_Click()
         End If
     Next i
     
+    ' check if the user has either one of the telephone or email filled in
+    If IsStringEmpty(NC_EmailInput.Value) And IsStringEmpty(NC_TelephoneInput) Then
+        MsgBox "Must fill in at least one of: telephone or email!", vbExclamation, "Input Error"
+        Exit Sub
+    End If
+        
+    
     ' # Generate a ID for the new cadet and a sheet
     Dim sNewCadetID As String
     sNewCadetID = GetUUID()
     Dim sNewSheetName As String
-    sNewSheetName = left(NC_FirstNameInput.Value & "_" & NC_SurnameInput.Value, 20) & "_" & sNewCadetID
+    sNewSheetName = left(Replace(NC_FirstNameInput.Value, " ", "_") & "_" & Replace(NC_SurnameInput.Value, " ", "_"), 20) & "_" & sNewCadetID
 
     CreateNewCadetSheet (sNewSheetName)
   
@@ -140,7 +144,7 @@ Sub NC_SubmitButton_Click()
                 CreatedSheet.Range("E" & i).Value = SplittedSize(0)
                 CreatedSheet.Range("A" & i).Value = SplittedSize(1)
                 
-                If FindInInventory(SplittedSize(1)) > 0 Then
+                If NC_EnableStock And FindInInventory(SplittedSize(1)) > 0 Then
                     CreatedSheet.Range("G" & i).Value = "In Stock"
                 End If
             End If

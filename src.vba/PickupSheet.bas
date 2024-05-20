@@ -28,7 +28,7 @@ Sub pickup()
 
     For Each ws In ThisWorkbook.Worksheets
         ' ignore special sheets
-        If isSpecialSheet(ws.Name) Then
+        If isSpecialSheet(ws.name) Then
             GoTo continue
         End If
         
@@ -60,7 +60,7 @@ Sub pickup()
         ' get name
         origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
         Dim linkAddress As String
-        linkAddress = "" & ws.Name & "!A1"
+        linkAddress = "" & ws.name & "!A1"
         origSheet.Hyperlinks.Add Anchor:=origSheet.Cells(PickUpSheetRow + 1, 1), _
                           Address:="", _
                           SubAddress:=linkAddress, _
@@ -82,13 +82,13 @@ continueinner:
         
         Dim t As Range
         Set t = origSheet.Cells(PickUpSheetRow + 1, 26)
-        Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
+        Set btn = ActiveSheet.Buttons.Add(t.left + 3, t.Top + 3, t.Width - 6, t.Height - 6)
         Dim SheetName As String
-        SheetName = """" & ws.Name & """"
+        SheetName = """" & ws.name & """"
         With btn
           .OnAction = "'markPickUpAsComplete " & SheetName & ", " & PickUpSheetRow & "'"
           .Caption = "Complete"
-          .Name = "Complete" & PickUpSheetRow
+          .name = "Complete" & PickUpSheetRow
         End With
         
         PickUpSheetRow = PickUpSheetRow + 1
@@ -109,4 +109,6 @@ Sub markPickUpAsComplete(n As String, r As Integer)
         End If
     Next cell
     Rows(r + 1).EntireRow.Delete
+    
+    pickup
 End Sub

@@ -9,7 +9,7 @@ Sub ManualBackup()
     currentDate = Format(Now, "mm-dd-yyyy_hh_nn_ss_am/pm")
     
     ' Get the current workbook's name
-    fileName = ThisWorkbook.Name
+    fileName = ThisWorkbook.name
     
     ' Replace any spaces in the workbook name with underscores
     fileName = Replace(fileName, " ", "_")

@@ -10,6 +10,10 @@ Dim FootLCount As Integer
 Dim FootWCount As Integer
 Dim HandCount As Integer
 
+Private Sub CheckBox1_Click()
+
+End Sub
+
 Private Sub UserForm_Initialize()
 '
 ' Initialize frm
@@ -106,7 +110,7 @@ Private Sub EX_SubmitButton_Click()
     For Each SelectedButton In SelectButtons
         If SelectedButton.Value Then
             ' Debug.Print SelectedButton.Caption
-            ReCalculateSize (SelectedButton.Caption)
+            ReCalculateSize SelectedButton.Caption, EX_EnableStock
         End If
     Next SelectedButton
     
@@ -307,7 +311,7 @@ Private Function EX_DataValidation()
     Dim ValidateResults(1 To 18) As Variant
     If HeadCount > 0 Then
       ValidateResults(1) = ValidateNumber(EX_HeadInput)
-      ValidateResults(2) = ValidateRange(EX_HeadInput, 19, 26)
+      ValidateResults(2) = ValidateRange(EX_HeadInput, 19, 24.63)
     End If
     If NeckCount > 0 Then
       ValidateResults(3) = ValidateNumber(EX_NeckInput)

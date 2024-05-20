@@ -1,5 +1,5 @@
 Private Sub Workbook_SheetChange(ByVal sh As Object, ByVal Target As Range)
-    If isSpecialSheet(sh.Name) Then
+    If isSpecialSheet(sh.name) Then
         Exit Sub
     End If
     
@@ -43,7 +43,7 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
     currentDate = Format(Date, "mm-dd-yyyy")
     
     ' Get the current workbook's name
-    fileName = ThisWorkbook.Name
+    fileName = ThisWorkbook.name
     
     ' Replace any spaces in the workbook name with underscores
     fileName = Replace(fileName, " ", "_")

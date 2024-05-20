@@ -10,7 +10,7 @@ Sub MarkAsSOS()
     ' Get reference to the current sheet
     Set ws = ActiveSheet
     
-    If ws.Name = "Template" Then
+    If ws.name = "Template" Then
         MsgBox "Cannot mark the template as SOS"
         Exit Sub
     Else
@@ -44,7 +44,7 @@ Sub Terminate()
     Set ws = ActiveSheet
     
     ' Add confirm box when deleting
-    If ws.Name = "Template" Then
+    If ws.name = "Template" Then
         MsgBox "Cannot delete the template"
         Exit Sub
     Else
@@ -104,6 +104,6 @@ Sub Terminate()
     End If
     
     
-    ThisWorkbook.Sheets(Application.ActiveSheet.Name).Delete
+    ThisWorkbook.Sheets(Application.ActiveSheet.name).Delete
     
 End Sub

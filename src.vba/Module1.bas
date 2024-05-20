@@ -134,5 +134,19 @@ continue:
         For i = 1 To changesCount
             qtyCells(i).Value = qtyCells(i).Value + newqty(i)
         Next i
+    
+        ' delete after update
+        lastRow = ActiveSheet.UsedRange.Rows.Count
+        Dim iii As Integer
+        For iii = 2 To lastRow
+            If Not i = lastRow Then
+                ThisWorkbook.Sheets("Master").Rows(3).Delete
+            Else
+                ThisWorkbook.Sheets("Master").Rows(2).Delete
+            End If
+        Next iii
     End If
+
+    
 End Sub
+

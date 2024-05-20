@@ -8,7 +8,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     Dim foundStatus As String ' Move the foundStatus variable declaration outside the loop
     
     ' Define the search strings in the new order of priority
-    SearchStrings = Array("S.O.S", "UNP", "In Stock", "Pick Up", "Ready To Order", "Ordered", "Complete", "Returned")
+    SearchStrings = Array("S.O.S", "UNP", "In Stock", "Pick Up", "Ready To Order", "Ordered", "Complete", "Returned", "Unknown")
     
     
     ' Set a reference to the Menu sheet
@@ -27,7 +27,7 @@ Sub ScanAllSheetsAndPrioritizeLabels()
     ' Loop through all sheets
     For Each sh In ActiveWorkbook.Worksheets
         ' Check if the sheet should be excluded
-        If Not isSpecialSheet(sh.Name) Then
+        If Not isSpecialSheet(sh.name) Then
             ' Extract the unique barcode from cell G2
             barcode = sh.Cells(2, "G").Value ' Move this line here
             

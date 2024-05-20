@@ -48,8 +48,10 @@ Private Function GetStatusFromColorCell(cell As Range) As String
       GetStatusFromColorCell = "Complete"
     ElseIf cell.Interior.Color = RGB(128, 128, 128) Then
       GetStatusFromColorCell = "Returned"
-    Else
+    ElseIf cell.Interior.Color = 6155005 Then
       GetStatusFromColorCell = "UNP"
+    Else
+      GetStatusFromColorCell = "Unknown"
     End If
 End Function
 
@@ -126,6 +128,8 @@ Sub ImportFromOldSheet()
         Dim FootW As String
         Dim Hand As String
         Dim ID As String
+        Dim Email As String
+        Dim Phone As String
         Dim shouldGenerate As Boolean
 
         Dim sizes(6 To 26) As Range
@@ -144,7 +148,9 @@ Sub ImportFromOldSheet()
         FootL = ws.Cells(Row, 12)
         FootW = ws.Cells(Row, 13)
         Hand = ws.Cells(Row, 14)
-        shouldGenerate = ws.Cells(Row, 33) = "Y"
+        Phone = ws.Cells(Row, 33)
+        Email = ws.Cells(Row, 34)
+        shouldGenerate = ws.Cells(Row, 35) = "Y"
         
         Set sizes(6) = ws.Cells(Row, 15)  ' Tunic
         Set sizes(7) = ws.Cells(Row, 17) ' Shirt
@@ -185,7 +191,7 @@ Sub ImportFromOldSheet()
         Sheets(sNewSheetName).Range("B2").Value = Rank
         Sheets(sNewSheetName).Range("C2").Value = LastName
         Sheets(sNewSheetName).Range("E2").Value = FirstName
-        Sheets(sNewSheetName).Range("B4").Value = "9999999999"
+        Sheets(sNewSheetName).Range("B4").Value = Phone
         Sheets(sNewSheetName).Range("E4").Value = Email
         ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
         Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
@@ -323,24 +329,16 @@ Sub ExportData()
     Dim Row As Integer
     Row = 0
     
+    For i = 1 To 34
+        ows.Columns(i).NumberFormat = "@"
+    Next i
+    
     For Each ws In OrigBook.Sheets
-        If isSpecialSheet(ws.Name) Then
+        If isSpecialSheet(ws.name) Then
             GoTo continue
         End If
         
         ' Map all the variables needed to a cell in the row
-        Dim LastName As String
-        Dim FirstName As String
-        Dim Rank As String
-        Dim Gender As Boolean
-        Dim Head As String
-        Dim Neck As String
-        Dim Chest As String
-        Dim Waist As String
-        Dim Hips As String
-        Dim Height As String
-        Dim FootL As String
-        Dim FootW As String
         Row = Row + 1
         
         ows.Cells(Row, 1) = ws.Range("C2").Value    ' User Last Name
@@ -418,15 +416,17 @@ Sub ExportData()
         ows.Cells(Row, 32) = ws.Cells(26, 5)  ' Nametag
         ows.Cells(Row, 32).Interior.Color = ws.Cells(26, 7).DisplayFormat.Interior.Color
         
-       
+        
+        ows.Cells(Row, 33) = "'" & ws.Cells(4, 2).Value  ' phone
+
+        ows.Cells(Row, 34) = ws.Cells(4, 5).Value   ' email
         
        
 continue:
     Next ws
 
-ows.Columns(19).NumberFormat = "@"
-ows.Columns(27).NumberFormat = "@"
 
+    OutBook.Close True
     Application.EnableEvents = True
 End Sub
 

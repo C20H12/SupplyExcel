@@ -10,7 +10,7 @@ Sub Resize()
     
     Application.EnableEvents = True
 End Sub
-Sub ReCalculateSize(Optional ItemNameToChange As String)
+Sub ReCalculateSize(Optional ItemNameToChange As String, Optional shouldCheckInventory As Boolean)
     ' # Getting the sizing information
     Dim MeasuredSizes As Collection
     Set MeasuredSizes = New Collection
@@ -45,14 +45,14 @@ Sub ReCalculateSize(Optional ItemNameToChange As String)
                     ' Use .Text so that fractions aren't converted to decimals
                     If Not SplittedSize(0) = ActiveSheet.Range("E" & i).Text Then
                         
-                        If FindInInventory(SplittedSize(1), True) Then
+                        If shouldCheckInventory And FindInInventory(SplittedSize(1), True) Then
                             ActiveSheet.Range("G" & i).Value = "In Stock"
                         Else
                             ActiveSheet.Range("G" & i).Value = "UNP"
                         End If
                         
                         Dim sNewSheetName As String
-                        sNewSheetName = ActiveSheet.Name
+                        sNewSheetName = ActiveSheet.name
                         Dim extbl As ListObject
                         Set extbl = ActiveSheet.ListObjects(sNewSheetName & "ExchangeTable")
                         Dim NewRow As ListRow

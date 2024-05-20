@@ -1,17 +1,14 @@
 Sub master()
     ThisWorkbook.Sheets("Master").Range("A3").Value = "Generating"
+    
     Dim lastRow As Long
     lastRow = ActiveSheet.UsedRange.Rows.count
-    Dim nameStatus() As Variant
+
     Dim i As Integer
     For i = 3 To lastRow
-        'store the color on the name cell (status set by the user)
-        ReDim Preserve nameStatus(i - 2)
         If Not i = lastRow Then
-            nameStatus(i - 2) = ThisWorkbook.Sheets("Master").Cells(4, 1).Interior.Color
             ThisWorkbook.Sheets("Master").Rows(4).Delete
         Else
-            nameStatus(0) = ThisWorkbook.Sheets("Master").Cells(3, 1).Interior.Color
             ThisWorkbook.Sheets("Master").Rows(3).Delete
         End If
     Next i
@@ -26,18 +23,17 @@ Sub master()
     
     ActiveWorkbook.Worksheets("Master").ListObjects("StatusTable").AutoFilter.ShowAllData
     
-   ' remove all buttons so that there is no overlap
-    For Each btn In origSheet.Buttons
-        If btn.Caption <> "Generate" Then
-            btn.Delete
-        End If
-    Next btn
+    Dim sheetCount As Integer
+    sheetCount = 0
 
     For Each ws In ThisWorkbook.Worksheets
+        
         ' ignore special sheets
-        If isSpecialSheet(ws.Name) Then
+        If isSpecialSheet(ws.name) Then
             GoTo continue
         End If
+        
+        sheetCount = sheetCount + 1
         
         ' get all the items' nsn, size, and status in lists
         Dim nsnRange As Range
@@ -58,7 +54,7 @@ Sub master()
         ' get name
         origSheet.Cells(PickUpSheetRow + 1, 1).Value = ws.Range("C2").Value + ", " + ws.Range("E2").Value
         Dim linkAddress As String
-        linkAddress = "" & ws.Name & "!A1"
+        linkAddress = "" & ws.name & "!A1"
         origSheet.Hyperlinks.Add Anchor:=origSheet.Cells(PickUpSheetRow + 1, 1), _
                           Address:="", _
                           SubAddress:=linkAddress, _
@@ -110,39 +106,49 @@ continueinner:
         origSheet.Cells(PickUpSheetRow + 1, 24).Value = statusString
         
         ' highlight name as red if not all complete
-        If hasIncomplete Then
-            origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(252, 136, 136)
+        If Not IsStringEmpty(ws.Cells(27, 1).Value) Then
+            origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = ws.Cells(27, 1).Value
         Else
-            origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(140, 255, 140)
+        
+            If hasIncomplete Then
+                origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(252, 136, 136)
+                ws.Cells(27, 1).Value = RGB(252, 136, 136)
+            Else
+                origSheet.Cells(PickUpSheetRow + 1, 1).Interior.Color = RGB(140, 255, 140)
+                ws.Cells(27, 1).Value = RGB(140, 255, 140)
+            End If
+        
         End If
         
         Dim t As Range
         Set t = origSheet.Cells(PickUpSheetRow + 1, 23)
-        Set btn = ActiveSheet.Buttons.Add(t.left, t.Top, t.Width, t.Height)
+        Set btn = ActiveSheet.Buttons.Add(t.left + 1, t.Top + 1, t.Width - 2, t.Height - 2)
+        
+        Dim actionstring As String
+        actionstring = "togglePersonAsComplete " & PickUpSheetRow + 1 & ", " & """" & ws.name & """"
+        
         With btn
-          .OnAction = "'togglePersonAsComplete " & PickUpSheetRow + 1 & "'"
-          .Caption = "Toggle"
-          .Name = "Toggle" & PickUpSheetRow 'need to have a unique name or else it won't delete
+            .OnAction = "'" & actionstring & "'"
+            .Text = "Toggle" & PickUpSheetRow 'need to have a unique name or else it won't delete
         End With
+        
         
         PickUpSheetRow = PickUpSheetRow + 1
         
 continue:
     Next ws
     
-    ' restore color
-    For i = 0 To lastRow - 3
-        origSheet.Cells(i + 3, 1).Interior.Color = nameStatus(i)
-    Next i
-    
 End Sub
 
-Sub togglePersonAsComplete(r As Integer)
+Sub togglePersonAsComplete(r As Integer, name As String)
     If ActiveSheet.Cells(r, 1).Interior.Color = RGB(140, 255, 140) Then
         ActiveSheet.Cells(r, 1).Interior.Color = RGB(253, 234, 93)
+        Sheets(name).Cells(27, 1).Value = RGB(253, 234, 93)
     ElseIf ActiveSheet.Cells(r, 1).Interior.Color = RGB(253, 234, 93) Then
          ActiveSheet.Cells(r, 1).Interior.Color = RGB(252, 136, 136)
+         Sheets(name).Cells(27, 1).Value = RGB(252, 136, 136)
     Else:
         ActiveSheet.Cells(r, 1).Interior.Color = RGB(140, 255, 140)
+        Sheets(name).Cells(27, 1).Value = RGB(140, 255, 140)
     End If
 End Sub
