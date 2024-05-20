@@ -48,8 +48,6 @@ Private Function GetStatusFromColorCell(cell As Range) As String
       GetStatusFromColorCell = "Complete"
     ElseIf cell.Interior.Color = RGB(128, 128, 128) Then
       GetStatusFromColorCell = "Returned"
-    ElseIf cell.Interior.Color = 6155005 Then
-      GetStatusFromColorCell = "UNP"
     Else
       GetStatusFromColorCell = "Unknown"
     End If
@@ -150,7 +148,7 @@ Sub ImportFromOldSheet()
         Hand = ws.Cells(Row, 14)
         Phone = ws.Cells(Row, 33)
         Email = ws.Cells(Row, 34)
-        shouldGenerate = ws.Cells(Row, 35) = "Y"
+        shouldGenerate = ws.Cells(Row, 36) = "Y"
         
         Set sizes(6) = ws.Cells(Row, 15)  ' Tunic
         Set sizes(7) = ws.Cells(Row, 17) ' Shirt
@@ -179,7 +177,7 @@ Sub ImportFromOldSheet()
         ' if ID is empty, generate one
         sNewCadetID = IIf(IsStringEmpty(ID), GetUUID(), ID)
         Dim sNewSheetName As String
-        sNewSheetName = left(FirstName & "_" & LastName, 20) & "_" & sNewCadetID
+        sNewSheetName = left(Replace(FirstName, " ", "_") & "_" & Replace(LastName, " ", "_"), 20) & "_" & sNewCadetID
         
         If SheetExist(sNewSheetName) Then
             GoTo continue
@@ -265,9 +263,27 @@ Sub ImportFromOldSheet()
             Next i
         End If
         
+        ' nametag
         Sheets(sNewSheetName).Range("G" & 26).Value = GetStatusFromColorCell(sizes(26))
-        ' # Insert an entry to the menu that holds all sheets
         
+        ' exchange history
+        If Not IsStringEmpty(ws.Cells(Row, 35)) Then
+            Dim exchangeRows() As String
+            exchangeRows = Split(ws.Cells(Row, 35).Value, "+++")
+            For Each exchangerow In exchangeRows
+                Dim exchangeRowItemList()  As String
+                exchangeRowItemList = Split(exchangerow, "===")
+                Dim exchangeRowTable As ListRow
+                Set exchangeRowTable = Sheets(sNewSheetName).ListObjects(sNewSheetName & "ExchangeTable").ListRows.Add
+                exchangeRowTable.Range(1, 1).Value = exchangeRowItemList(0)
+                exchangeRowTable.Range(1, 2).Value = exchangeRowItemList(1)
+                exchangeRowTable.Range(1, 3).Value = exchangeRowItemList(2)
+                exchangeRowTable.Range(1, 4).Value = exchangeRowItemList(3)
+            Next exchangerow
+        End If
+        
+        
+        ' # Insert an entry to the menu that holds all sheets
         Set ws = ThisWorkbook.Sheets("Menu")
         
         ' Find the next empty row in column B of the "Menu" worksheet
@@ -421,7 +437,22 @@ Sub ExportData()
 
         ows.Cells(Row, 34) = ws.Cells(4, 5).Value   ' email
         
+        ' exchange history as string date===item===size===size_new+++[more]
+        If Not IsStringEmpty(ws.Cells(38, 1).Value) Then
+            Dim exchangeHistory() As String
+            Dim exchangeHistoryRows As Integer
+            exchangeHistoryRows = ws.ListObjects(ws.name & "ExchangeTable").Range.Rows.count
+            
+            For i = 0 To exchangeHistoryRows - 2
+                Dim exchangeHistoryRow() As Variant
+                exchangeHistoryRow = Array(ws.Cells(38 + i, 1), ws.Cells(38 + i, 2), ws.Cells(38 + i, 3), ws.Cells(38 + i, 4))
+                ReDim Preserve exchangeHistory(i)
+                exchangeHistory(i) = Join(exchangeHistoryRow, "===")
+            Next i
+            
+            ows.Cells(Row, 35) = Join(exchangeHistory, "+++")
        
+        End If
 continue:
     Next ws
 

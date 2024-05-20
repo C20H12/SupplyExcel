@@ -92,7 +92,7 @@ Function ArrayToString(ByRef arr() As Variant) As String
     out = ""
     For i = 0 To UBound(arr)
         out = out & arr(i)
-        MsgBox arr(i)
+        'MsgBox arr(i)
     Next i
     ArrayToString = out
 End Function

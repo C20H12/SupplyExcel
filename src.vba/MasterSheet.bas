@@ -21,6 +21,13 @@ Sub master()
     Dim PickUpSheetRow As Integer
     PickUpSheetRow = 2
     
+    ' remove all buttons so that there is no overlap
+    For Each btn In origSheet.Buttons
+        If btn.Caption <> "Generate" Then
+            btn.Delete
+        End If
+    Next btn
+    
     ActiveWorkbook.Worksheets("Master").ListObjects("StatusTable").AutoFilter.ShowAllData
     
     Dim sheetCount As Integer
@@ -90,6 +97,8 @@ Sub master()
               origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(155, 194, 230)
             ElseIf status(i) = "Returned" Then
               origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(128, 128, 128)
+            Else
+              origSheet.Cells(PickUpSheetRow + 1, i + 2).Interior.Color = RGB(231, 230, 230)
             End If
             
             If status(i) <> "Complete" Then

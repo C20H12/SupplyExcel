@@ -48,8 +48,19 @@ Sub Testing()
     ' Debug.Print "a8410a-21-912-3651" Like "####*-##-###-####"
 
 
-    Debug.Print GetNSNFromSize("Tunic", "8062", True)
-    Debug.Print GetNSNFromSize("Tunic", "9999", True)
-    Debug.Print GetNSNFromSize("Collar Shirt", "13", True)
-    Debug.Print GetNSNFromSize("Parka", "6432", True)
+'    Debug.Print GetNSNFromSize("Tunic", "8062", True)
+'    Debug.Print GetNSNFromSize("Tunic", "9999", True)
+'    Debug.Print GetNSNFromSize("Collar Shirt", "13", True)
+'    Debug.Print GetNSNFromSize("Parka", "6432", True)
+
+    Dim exchangeHistoryRow() As Variant
+    With Sheets("Wendy_Lee_5804A09C")
+        exchangeHistoryRow = Array(Range("A38"), Range("B38"), Range("C38"), Range("D38"))
+        Debug.Print .ListObjects(.name & "ExchangeTable").Range.Rows.count
+    End With
+
+    Debug.Print Join(exchangeHistoryRow, "===")
+    
+    
+    
 End Sub
