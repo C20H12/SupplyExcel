@@ -134,7 +134,7 @@ Sub ImportFromOldSheet()
 
         LastName = ws.Cells(Row, 1)
         FirstName = ws.Cells(Row, 2)
-        Gender = ws.Cells(Row, 3) = "Male"
+        Gender = ws.Cells(Row, 3)
         Rank = IIf(IsStringEmpty(ws.Cells(Row, 4)), "AC", ws.Cells(Row, 4))
         ID = ws.Cells(Row, 5)
         Head = ws.Cells(Row, 6)
@@ -194,11 +194,6 @@ Sub ImportFromOldSheet()
         ' THIS IS SPECIFICALLY FOR THE REFERENCE CODE OF EACH CADET
         Sheets(sNewSheetName).Range("G2").Value = sNewCadetID
         
-        If Gender = False Then
-            Sheets(sNewSheetName).Range("G4").Value = "Female"
-        Else
-            Sheets(sNewSheetName).Range("G4").Value = "Male"
-        End If
         
         Sheets(sNewSheetName).Range("L2").Value = Head
         Sheets(sNewSheetName).Range("L3").Value = Neck
